@@ -30,7 +30,7 @@ namespace WeatherInTheCity.API.Services
             httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
             var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
-            
+
             httpResponseMessage.EnsureSuccessStatusCode();
 
             using var contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
