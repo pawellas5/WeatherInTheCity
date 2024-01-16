@@ -9,11 +9,11 @@ namespace WeatherInTheCity.API.Services
 {
     public class OpenWeatherService : IOpenWeatherService
     {
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;
-        public OpenWeatherService(IConfiguration configuration, IHttpClientFactory httpClientFactory)
+        public OpenWeatherService(IConfiguration configuration, HttpClient httpClient)
         {
-            _httpClientFactory = httpClientFactory;
+            _httpClient = httpClient;
             _configuration = configuration;
         }
 
@@ -21,15 +21,12 @@ namespace WeatherInTheCity.API.Services
         {
             var apiKey = _configuration["WeatherApiKey"];
 
-            var httpClient = _httpClientFactory.CreateClient();
-            httpClient.Timeout = new TimeSpan(0, 0, 45);
-
             var httpRequestMessage = new HttpRequestMessage(
             HttpMethod.Get,
             $"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={apiKey}");
             httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var httpResponseMessage = await httpClient.SendAsync(httpRequestMessage);
+            var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage);
 
             httpResponseMessage.EnsureSuccessStatusCode();
 
