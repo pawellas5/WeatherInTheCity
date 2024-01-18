@@ -26,13 +26,22 @@ namespace WeatherInTheCity.API.Services
             $"https://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&appid={apiKey}");
             httpRequestMessage.Headers.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var httpResponseMessage = await _httpClient.SendAsync(httpRequestMessage);
+            var httpResponseMessage = await _httpClient
+                .SendAsync(httpRequestMessage);
 
             httpResponseMessage.EnsureSuccessStatusCode();
 
-            using var contentStream = await httpResponseMessage.Content.ReadAsStreamAsync();
+            using var contentStream = await httpResponseMessage
+                .Content
+                .ReadAsStreamAsync();
 
-            var weather = await JsonSerializer.DeserializeAsync<OpenWeatherDTO>(contentStream);
+
+            var weather = await JsonSerializer
+                .DeserializeAsync<OpenWeatherDTO>(contentStream,
+                new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
 
 
             return weather!;

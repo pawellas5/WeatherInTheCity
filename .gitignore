@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /WeatherInTheCity.API/WeatherInTheCity.API/appsettings.Development.json
+/WeatherInTheCity.API/WeatherInTheCity.API/Properties/launchSettings.json
