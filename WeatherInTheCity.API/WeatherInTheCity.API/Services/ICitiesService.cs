@@ -1,11 +1,13 @@
-﻿namespace WeatherInTheCity.API.Services
+﻿using WeatherInTheCity.API.Entities;
+
+namespace WeatherInTheCity.API.Services
 {
     public interface ICitiesService
 
     {
-        public string CorrectCity { get; }
-        public List<string> FourCities { get; }
-        public List<string> Rand4Cities();
+        public City CorrectCity { get; }
+        public List<City> PossibleCities { get; }
+        public void Rand4Cities();
 
     }
 }

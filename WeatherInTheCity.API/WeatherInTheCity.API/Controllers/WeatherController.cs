@@ -12,16 +12,24 @@ namespace WeatherInTheCity.API.Controllers
     {
         private readonly IOpenWeatherService _openWeatherService;
         private readonly ICitiesService _citiesService;
+
         public WeatherController(IOpenWeatherService openWeatherService, ICitiesService citiesService)
         {
             _openWeatherService = openWeatherService;
             _citiesService = citiesService;
         }
-        [HttpGet("{city}")]
-        public async Task<ActionResult<OpenWeatherDTO>> Get(string city)
-        {
 
-            var weather = await _openWeatherService.GetWeather(city);
+        [HttpGet]
+        public async Task<ActionResult<OpenWeatherDTO>> Get()
+        {
+            _citiesService.Rand4Cities();
+
+            var possibleCities = _citiesService.PossibleCities;
+            var correctCity = _citiesService.CorrectCity;
+
+            var weather = await _openWeatherService.GetWeather($"{correctCity.CityName},{correctCity.CountryCode})");
+
+            
             if (weather == null)
             {
                 return NotFound();
@@ -30,6 +38,6 @@ namespace WeatherInTheCity.API.Controllers
             return Ok(weather);
 
         }
-        
+
     }
 }
