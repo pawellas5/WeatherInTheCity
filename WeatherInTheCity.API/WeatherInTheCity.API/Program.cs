@@ -25,6 +25,7 @@ Log.Logger = new LoggerConfiguration()
         path: "./Logs/.txt",
         rollingInterval: RollingInterval.Day)
     .CreateLogger();
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 builder.Logging.AddSerilog(Log.Logger);
 builder.Services.AddControllers();
@@ -37,6 +38,14 @@ builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
     .AddPolicyHandler(retryPolicy)
     .AddPolicyHandler(circuitBreakerPolicy)
     .AddPolicyHandler(timeoutPolicy);
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                      });
+});
 
 var app = builder.Build();
 
@@ -48,6 +57,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+app.UseRouting();
+
+if (app.Environment.IsDevelopment())
+    app.UseCors(MyAllowSpecificOrigins);
+
 
 app.UseAuthorization();
 
