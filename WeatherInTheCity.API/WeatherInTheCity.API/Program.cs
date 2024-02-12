@@ -1,7 +1,9 @@
+using Microsoft.EntityFrameworkCore;
 using Polly;
 using Polly.Extensions.Http;
 using Polly.Timeout;
 using Serilog;
+using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,12 +34,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<ICitiesService,CitiesService>();
+builder.Services.AddScoped<ICitiesService, CitiesService>();
 builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
     .SetHandlerLifetime(TimeSpan.FromMinutes(3))
     .AddPolicyHandler(retryPolicy)
     .AddPolicyHandler(circuitBreakerPolicy)
     .AddPolicyHandler(timeoutPolicy);
+builder.Services.AddDbContext<WeatherInTheCityDbContext>(o =>
+    o.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
