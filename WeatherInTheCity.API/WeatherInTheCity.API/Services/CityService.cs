@@ -4,6 +4,7 @@ using Polly;
 using System.Reflection.Metadata.Ecma335;
 using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Entities;
+using WeatherInTheCity.API.Models;
 
 namespace WeatherInTheCity.API.Services
 {
@@ -15,22 +16,15 @@ namespace WeatherInTheCity.API.Services
             _context = context;
 
         }
-
-        private City correctCity = new City();
-        private List<City> possibleCities = new List<City>();
-
-        public City CorrectCity { get { return correctCity; } }
-        public List<City> PossibleCities { get { return possibleCities; } }
        
-
         /// <summary>
         /// Randomizes four possible cities for guessing the weather and determines the one that is correct.
         /// </summary>
         /// <returns>Returns a list of four cities.</returns>
-        public async Task Rand4Cities()
+        public async Task<List<CityDTO>> Rand4Cities()
         {
             var randIndices = new List<int>();
-            var possibleCitiesInit = new List<City>();
+            var possibleCitiesInit = new List<CityDTO>();
 
             do
             {
@@ -39,10 +33,15 @@ namespace WeatherInTheCity.API.Services
                 randIndices.Add(index);
             } while (randIndices.Count < 4);
 
-            possibleCitiesInit = await Get4CitiesById(randIndices);
-            correctCity = possibleCitiesInit[0];
-            possibleCities = possibleCitiesInit.OrderBy(c => c.CityName.GetHashCode()).ToList();
-            
+             (await Get4CitiesById(randIndices))
+                 .ForEach(c => possibleCitiesInit.Add(new CityDTO() { CityName = c.CityName, CountryName = c.CountryName , CountryCode = c.CountryCode}));
+
+            possibleCitiesInit[0].isCorrect=true;
+
+            var possibleCities = possibleCitiesInit.OrderBy(c => c.CityName.GetHashCode()).ToList();
+
+            return possibleCities;
+
         }
 
         public async Task<List<City>> Get4CitiesById(List<int> indices)

@@ -22,10 +22,9 @@ namespace WeatherInTheCity.API.Controllers
         [HttpGet]
         public async Task<ActionResult<OpenWeatherDTO>> Get()
         {
-            await _citiesService.Rand4Cities();
-
-            var possibleCities = _citiesService.PossibleCities;
-            var correctCity = _citiesService.CorrectCity;
+           
+            var possibleCities = await _citiesService.Rand4Cities();
+            var correctCity = possibleCities.Where(c=>c.isCorrect==true).First();
 
             var weather = await _openWeatherService.GetWeather($"{correctCity.CityName},{correctCity.CountryCode})");
 
