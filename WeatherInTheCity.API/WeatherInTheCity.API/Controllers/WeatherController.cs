@@ -11,9 +11,9 @@ namespace WeatherInTheCity.API.Controllers
     public class WeatherController : ControllerBase
     {
         private readonly IOpenWeatherService _openWeatherService;
-        private readonly ICitiesService _citiesService;
+        private readonly ICityService _citiesService;
 
-        public WeatherController(IOpenWeatherService openWeatherService, ICitiesService citiesService)
+        public WeatherController(IOpenWeatherService openWeatherService, ICityService citiesService)
         {
             _openWeatherService = openWeatherService;
             _citiesService = citiesService;
@@ -22,14 +22,14 @@ namespace WeatherInTheCity.API.Controllers
         [HttpGet]
         public async Task<ActionResult<OpenWeatherDTO>> Get()
         {
-            _citiesService.Rand4Cities();
+            await _citiesService.Rand4Cities();
 
             var possibleCities = _citiesService.PossibleCities;
             var correctCity = _citiesService.CorrectCity;
 
             var weather = await _openWeatherService.GetWeather($"{correctCity.CityName},{correctCity.CountryCode})");
 
-            
+
             if (weather == null)
             {
                 return NotFound();
