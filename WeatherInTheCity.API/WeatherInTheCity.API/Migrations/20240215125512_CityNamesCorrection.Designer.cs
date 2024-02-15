@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WeatherInTheCity.API.DbContexts;
 
@@ -10,9 +11,11 @@ using WeatherInTheCity.API.DbContexts;
 namespace WeatherInTheCity.API.Migrations
 {
     [DbContext(typeof(WeatherInTheCityDbContext))]
-    partial class WeatherInTheCityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240215125512_CityNamesCorrection")]
+    partial class CityNamesCorrection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
