@@ -20,11 +20,18 @@ export default {
   box-sizing: border-box;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  display:flex;
+  flex-direction: column;
+  gap:2.5rem;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  background-color: #dde3c7;
 }
 </style>
