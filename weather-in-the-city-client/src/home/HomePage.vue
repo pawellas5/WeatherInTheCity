@@ -105,7 +105,7 @@ export default {
     color:white;
     font-size:2rem;
     text-align:left;
-    padding-top:4rem;;
+    padding-top:4rem;
   }
   .btn{
     width:250px;
@@ -121,5 +121,119 @@ export default {
     background-color:#ff9300;
 
   }
+
+  @media screen and (max-width: 1024px ){
+    .main{
+      padding-top:2rem;
+    }
+
+    .btn{
+    width:500px;
+    height:70px;
+  }
+    .cities{
+  flex-direction: column;
+  }
+
+}
+
+@media screen and (max-width: 1024px ) and (orientation: landscape){
+
+    .btn{
+    width:200px;
+    height:80px;
+    font-size: 1.5rem;
+  }
+    .cities{
+  flex-direction: row;
+  }
+  .otherInfo div{
+    font-size: 1.5rem;
+  }
+  .temperature{
+    font-size: 8rem ;
+  }
+
+}
+@media screen and (max-width: 932px ) and (orientation: landscape){
+
+.btn{
+width:150px;
+height:40px;
+font-size: 0.8rem;
+}
+
+.otherInfo div{
+font-size: 0.8rem;
+}
+.temperature{
+font-size: 4rem ;
+}
+
+}
+@media screen and (max-width: 740px ) and (orientation: landscape){
+
+.btn{
+width:140px;
+height:20px;
+font-size: 0.6rem;
+}
+.otherInfo div{
+font-size: 0.6rem;
+}
+.temperature{
+font-size: 3rem ;
+}
+
+}
+
+@media screen and (max-width: 540px ){
+    .main{
+      padding-top:2rem;
+      font-size: 1.2rem;
+    }
+    .temperature{
+      font-size: 5rem;
+    }
+    .btn{
+    width:200px;
+    height:50px;
+    font-size: 1.2rem;
+  }
+    .cities{
+  flex-direction: column;
+  }
+
+}
+
+@media screen and (max-width: 375px ){
+    .main{
+      padding-top:2rem;
+      font-size: 1.1rem;
+    }
+    .temperature{
+      font-size: 5rem;
+    }
+    .btn{
+    width:180px;
+    height:35px;
+    font-size: 1.1rem;
+  }
+
+}
+
+@media screen and (max-width: 280px ){
+    .main{
+      font-size: 0.9rem;
+    }
+    .temperature{
+      font-size: 4.8rem;
+    }
+    .btn{
+    width:180px;
+    height:25px;
+    font-size: 0.9rem;
+  }
+}
 
   </style>
