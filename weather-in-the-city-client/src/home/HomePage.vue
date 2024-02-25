@@ -13,7 +13,7 @@
 
       </div>
       <div v-if="cities" class="cities">
-        <button class="btn">
+        <button @click="selectCity(0)" class="btn">
 
           <div v-if="cities[0]" class=cityName>
             {{cities[0].cityName}}
@@ -24,7 +24,7 @@
 
         </button>
 
-        <button class="btn">
+        <button  @click="selectCity(1)" class="btn">
 
           <div  v-if="cities[1]" class=cityName>
             {{cities[1].cityName}}
@@ -33,7 +33,7 @@
             ({{cities[1].countryName}})
           </div></button>
 
-        <button class="btn">
+        <button @click="selectCity(2)" class="btn">
 
           <div  v-if="cities[2]" class=cityName>
             {{cities[2].cityName}}
@@ -44,7 +44,7 @@
 
         </button>
 
-        <button class="btn">
+        <button @click="selectCity(3)" class="btn">
 
           <div  v-if="cities[3]" class=cityName>
             {{cities[3].cityName}}
@@ -63,6 +63,7 @@
 <script>
 import { storeToRefs } from 'pinia';
 import useGameStore from '../store/index';
+import selectCity from './selectCity';
 
 export default {
   name: 'HomePage',
@@ -75,6 +76,7 @@ export default {
       store,
       weather,
       cities,
+      selectCity,
     };
   },
 };
