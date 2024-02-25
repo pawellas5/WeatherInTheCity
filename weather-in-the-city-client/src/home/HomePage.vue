@@ -1,28 +1,26 @@
 <template>
     <div class="main">
-      <div class="weather">
+      <div  v-if="weather" class="weather">
         <div class="temperature">
-          7&deg;C
+          {{Math.round(weather.main.temp)}}&deg;C
         </div>
         <div class="otherInfo">
-          <div>Condition: Light Drizzle</div>
-          <div>Pressure: 100.7 kpa</div>
-          <div>Humidity: 100%</div>
-          <div>Wind: 8km/h</div>
+          <div>Description: {{ weather.weather[0].description }}</div>
+          <div>Pressure: {{ weather.main.pressure }} kpa</div>
+          <div>Humidity: {{weather.main.humidity}}%</div>
+          <div>Wind: {{weather.wind.speed}} km/h</div>
         </div>
 
       </div>
-      <div class="cities">
-        <button class="btn">Bruksela</button>
-        <button class="btn">Londyn</button>
-        <button class="btn">Rio de Janeiro</button>
-        <button class="btn">Toronto</button>
+      <div v-if="cities" class="cities">
+        <button class="btn">{{cities[0].cityName}}</button>
+        <button class="btn">{{cities[1].cityName}}</button>
+        <button class="btn">{{cities[2].cityName}}</button>
+        <button class="btn">{{cities[3].cityName}}</button>
 
       </div>
     </div>
-    <!-- <button class="btn" @click="getGameData">
-      Click
-    </button> -->
+
   </template>
 
 <script>
@@ -31,13 +29,10 @@ import useGameStore from '../store/index';
 
 export default {
   name: 'HomePage',
-  methods: {
-    getGameData() {
-      this.store.getGameData();
-    },
-  },
+
   setup() {
     const store = useGameStore();
+    store.getGameData();
     const { weather, cities } = storeToRefs(store);
     return {
       store,
@@ -48,7 +43,7 @@ export default {
 };
 </script>
 
-  <style scoped>
+<style scoped>
 
 .weather{
   background-color: #e9eaed;
