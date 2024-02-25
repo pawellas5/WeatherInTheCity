@@ -13,10 +13,47 @@
 
       </div>
       <div v-if="cities" class="cities">
-        <button class="btn">{{cities[0].cityName}}</button>
-        <button class="btn">{{cities[1].cityName}}</button>
-        <button class="btn">{{cities[2].cityName}}</button>
-        <button class="btn">{{cities[3].cityName}}</button>
+        <button class="btn">
+
+          <div class=cityName>
+            {{cities[0].cityName}}
+          </div>
+          <div class=countryName>
+            ({{cities[0].countryName}})
+          </div>
+
+        </button>
+
+        <button class="btn">
+
+          <div class=cityName>
+            {{cities[1].cityName}}
+          </div>
+          <div class=countryName>
+            ({{cities[1].countryName}})
+          </div></button>
+
+        <button class="btn">
+
+          <div class=cityName>
+            {{cities[2].cityName}}
+          </div>
+          <div class=countryName>
+            ({{cities[2].countryName}})
+          </div>
+
+        </button>
+
+        <button class="btn">
+
+          <div class=cityName>
+            {{cities[3].cityName}}
+          </div>
+          <div class=countryName>
+            ({{cities[3].countryName}})
+          </div>
+
+        </button>
 
       </div>
     </div>
@@ -44,6 +81,36 @@ export default {
 </script>
 
 <style scoped>
+
+.btn{
+    width:250px;
+    height:100px;
+    border-radius: 2rem;
+    border:0;
+    background-color: #ff7900;
+    color:white;
+    font-size: 2rem;
+  }
+  .btn:hover{
+    cursor:pointer;
+    background-color:#ff9300;
+
+  }
+.cities .btn{
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.cityName{
+ height: 60%;
+ padding-top:1rem;
+}
+.countryName{
+  height:40%;
+  font-size:1.4rem;
+}
 
 .weather{
   background-color: #e9eaed;
@@ -102,20 +169,6 @@ export default {
     text-align:left;
     padding-top:4rem;
   }
-  .btn{
-    width:250px;
-    height:100px;
-    border-radius: 2rem;
-    border:0;
-    background-color: #ff7900;
-    color:white;
-    font-size: 2rem;
-  }
-  .btn:hover{
-    cursor:pointer;
-    background-color:#ff9300;
-
-  }
 
   @media screen and (max-width: 1024px ){
     .main{
@@ -166,6 +219,38 @@ font-size: 4rem ;
 }
 
 }
+
+@media screen and (max-width: 932px ){
+
+  .cities .btn{
+    padding:0.5rem 0 0.5rem 0;
+    height:90px;
+}
+.cityName{
+ padding:0;
+ height:100%;
+
+}
+.countryName{
+  height:100%;
+  font-size:1.5rem;
+}
+
+}
+
+@media screen and (max-width: 768px ){
+.temperature{
+  font-size:8rem;
+}
+.cities .btn{
+  padding:0.5rem 0 0.5rem 0;
+  height:75px;
+}
+.countryName{
+font-size:1.5rem;
+}
+
+}
 @media screen and (max-width: 740px ) and (orientation: landscape){
 
 .btn{
@@ -183,6 +268,12 @@ font-size: 3rem ;
 }
 
 @media screen and (max-width: 540px ){
+
+  .cities .btn{
+    width:220px;
+    height:50px;
+    font-size: 1.2rem;
+  }
     .main{
       padding-top:2rem;
       font-size: 1.2rem;
@@ -190,10 +281,8 @@ font-size: 3rem ;
     .temperature{
       font-size: 5rem;
     }
-    .btn{
-    width:200px;
-    height:50px;
-    font-size: 1.2rem;
+  .countryName{
+    font-size: 1rem;
   }
     .cities{
   flex-direction: column;
@@ -207,13 +296,18 @@ font-size: 3rem ;
       font-size: 1.1rem;
     }
     .temperature{
-      font-size: 5rem;
+      font-size: 4rem;
     }
-    .btn{
-    width:180px;
-    height:35px;
-    font-size: 1.1rem;
-  }
+
+  .cities .btn{
+    padding:0.5rem 0 0.5rem 0;
+    height:45px;
+    width:200px;
+}
+
+.countryName{
+  font-size:0.9rem;
+}
 
 }
 
@@ -222,12 +316,18 @@ font-size: 3rem ;
       font-size: 0.9rem;
     }
     .temperature{
-      font-size: 4.8rem;
+      font-size: 3.5rem;
     }
-    .btn{
-    width:180px;
-    height:25px;
-    font-size: 0.9rem;
+
+  .cities .btn{
+    width:220px;
+    height:40px;
+  }
+  .countryName{
+    font-size: 0.8rem;
+  }
+  .cityName{
+    font-size:0.9rem;
   }
 }
 
