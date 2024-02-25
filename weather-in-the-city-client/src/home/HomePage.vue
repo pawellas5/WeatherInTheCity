@@ -15,10 +15,10 @@
       <div v-if="cities" class="cities">
         <button class="btn">
 
-          <div class=cityName>
+          <div v-if="cities[0]" class=cityName>
             {{cities[0].cityName}}
           </div>
-          <div class=countryName>
+          <div v-if="cities[0]" class=countryName>
             ({{cities[0].countryName}})
           </div>
 
@@ -26,19 +26,19 @@
 
         <button class="btn">
 
-          <div class=cityName>
+          <div  v-if="cities[1]" class=cityName>
             {{cities[1].cityName}}
           </div>
-          <div class=countryName>
+          <div  v-if="cities[1]" class=countryName>
             ({{cities[1].countryName}})
           </div></button>
 
         <button class="btn">
 
-          <div class=cityName>
+          <div  v-if="cities[2]" class=cityName>
             {{cities[2].cityName}}
           </div>
-          <div class=countryName>
+          <div  v-if="cities[2]" class=countryName>
             ({{cities[2].countryName}})
           </div>
 
@@ -46,10 +46,10 @@
 
         <button class="btn">
 
-          <div class=cityName>
+          <div  v-if="cities[3]" class=cityName>
             {{cities[3].cityName}}
           </div>
-          <div class=countryName>
+          <div   v-if="cities[3]" class=countryName>
             ({{cities[3].countryName}})
           </div>
 
