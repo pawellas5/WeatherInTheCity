@@ -1,6 +1,6 @@
 <template>
     <div class="main">
-      <div  v-if="weather" class="weather">
+      <div   class="weather">
         <div class="temperature">
           {{Math.round(weather.main.temp)}}&deg;C
         </div>
@@ -12,33 +12,33 @@
         </div>
 
       </div>
-      <div v-if="cities" class="cities">
-        <button @click="selectCity(0)" class="btn">
+      <div class="cities">
+        <button @click=" selectCity(0)" class="btn">
 
-          <div v-if="cities[0]" class=cityName>
+          <div class=cityName>
             {{cities[0].cityName}}
           </div>
-          <div v-if="cities[0]" class=countryName>
+          <div class=countryName>
             ({{cities[0].countryName}})
           </div>
 
         </button>
 
-        <button  @click="selectCity(1)" class="btn">
+        <button @click="selectCity(1)" class="btn">
 
-          <div  v-if="cities[1]" class=cityName>
+          <div class=cityName>
             {{cities[1].cityName}}
           </div>
-          <div  v-if="cities[1]" class=countryName>
+          <div  class=countryName>
             ({{cities[1].countryName}})
           </div></button>
 
         <button @click="selectCity(2)" class="btn">
 
-          <div  v-if="cities[2]" class=cityName>
+          <div class=cityName>
             {{cities[2].cityName}}
           </div>
-          <div  v-if="cities[2]" class=countryName>
+          <div class=countryName>
             ({{cities[2].countryName}})
           </div>
 
@@ -46,10 +46,10 @@
 
         <button @click="selectCity(3)" class="btn">
 
-          <div  v-if="cities[3]" class=cityName>
+          <div class=cityName>
             {{cities[3].cityName}}
           </div>
-          <div   v-if="cities[3]" class=countryName>
+          <div class=countryName>
             ({{cities[3].countryName}})
           </div>
 
@@ -62,7 +62,6 @@
 
 <script>
 import { storeToRefs } from 'pinia';
-import { useRouter } from 'vue-router';
 import useGameStore from '../store/index';
 import selectCity from './selectCity';
 
@@ -70,10 +69,7 @@ export default {
   name: 'GamePage',
 
   setup() {
-    const router = useRouter();
-    console.log(router);
     const store = useGameStore();
-    store.getGameData();
     const { weather, cities } = storeToRefs(store);
 
     return {
@@ -130,7 +126,6 @@ export default {
 .temperature{
   height:100%;
   width:50%;
-  /* background-color: red; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -141,7 +136,6 @@ export default {
 .otherInfo{
   height:100%;
   width:50%;
-  /* background-color: blue; */
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -150,7 +144,6 @@ export default {
 }
 
 .otherInfo div{
-  /* background-color: yellow; */
   width:60%;
   text-align: left;
   color:#ff7900
@@ -168,9 +161,7 @@ export default {
   .main{
     width:100%;
     height: 100%;
-    /* background-color: #1d1f20; */
     background-color: white;
-    /* background-color: white; */
     color:white;
     font-size:2rem;
     text-align:left;
@@ -189,7 +180,9 @@ export default {
     .cities{
   flex-direction: column;
   }
-
+  .weather{
+    border-radius: 0;
+  }
 }
 
 @media screen and (max-width: 1024px ) and (orientation: landscape){

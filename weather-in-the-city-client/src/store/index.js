@@ -13,8 +13,8 @@ export default defineStore(
     },
     actions:
     {
-      async getGameData() {
-        await axios.get('https://localhost:7172/game/')
+      getGameData() {
+        return axios.get('https://localhost:7172/game/')
           .then((response) => { this.gameData = response.data; })
           .catch((error) => { console.log(error); });
       },

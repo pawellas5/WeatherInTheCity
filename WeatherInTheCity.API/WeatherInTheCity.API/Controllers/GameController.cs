@@ -26,7 +26,7 @@ namespace WeatherInTheCity.API.Controllers
             var gameData = new GameDataDTO();
             var cities = await _citiesService.Rand4Cities();
             var weatherCity = cities.Where(c=>c.isCorrect==true).First();
-            var weather = await _openWeatherService.GetWeather($"{weatherCity.CityName.ToLower()},{weatherCity.CountryCode.ToLower()})");
+            var weather = await _openWeatherService.GetWeather($"{weatherCity.CityName.ToLower()},{weatherCity.CountryCode.ToLower()}");
 
             gameData.Weather = weather;
             gameData.Cities = cities;

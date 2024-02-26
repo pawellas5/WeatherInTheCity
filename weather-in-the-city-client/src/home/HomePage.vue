@@ -9,13 +9,16 @@
 
 <script>
 import { useRouter } from 'vue-router';
+import getQuestion from '../shared/getQuestion';
 
 export default {
   name: 'HomePage',
   setup() {
     const router = useRouter();
+    const startGame = async () => { await getQuestion(); router.push('/game'); };
+
     return {
-      startGame: () => router.push('/game'),
+      startGame,
     };
   },
 };
