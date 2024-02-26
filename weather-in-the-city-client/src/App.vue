@@ -2,14 +2,13 @@
   <nav>
     <ul>
       <li class="logo">
-        <a href="/">WeatherInTheCity</a>
+        <router-link class="link" to="/">WeatherInTheCity</router-link>
         <img  src="./assets/weather_logo.png" alt="logo">
       </li>
     </ul>
   </nav>
   <div class="content">
-    <HomePage/>
-
+    <router-view></router-view>
   </div>
   <footer>
     <a href="https://www.iconfinder.com/">
@@ -19,13 +18,9 @@
 </template>
 
 <script>
-import HomePage from './home/HomePage.vue';
 
 export default {
   name: 'App',
-  components: {
-    HomePage,
-  },
 };
 </script>
 
@@ -41,7 +36,7 @@ export default {
   width:300px;
 
 }
-.logo a{
+.logo .link{
   text-decoration: none;
   color:inherit;
 }
@@ -80,7 +75,7 @@ footer a{
   font-size: 1.5rem;
 
 }
-a:hover{
+footer a:hover{
   color:white;
 
 }

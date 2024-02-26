@@ -4,7 +4,6 @@ import useGameStore from '../store/index';
 export default function selectCity(id) {
   const store = useGameStore();
   const { cities } = storeToRefs(store);
-  console.log(cities.value);
   const foundCity = cities.value[id];
 
   // set isSelected property on the chosen city
@@ -13,7 +12,7 @@ export default function selectCity(id) {
   // check result
   if (cities.value[id].isCorrect) {
     alert('You won!');
-    window.location.replace('/');
+    store.getGameData(); // to the next question
   } else {
     alert('Try again!');
   }
