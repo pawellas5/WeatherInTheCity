@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.RateLimiting;
-using System.Collections.Generic;
-using System.Reflection.Metadata.Ecma335;
 using WeatherInTheCity.API.Models;
 using WeatherInTheCity.API.Services;
 

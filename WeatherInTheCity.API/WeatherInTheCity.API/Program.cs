@@ -7,6 +7,8 @@ using Serilog;
 using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Services;
 using System.Threading.RateLimiting;
+using System.Net;
+using System.Globalization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -62,14 +64,35 @@ builder.Services.AddCors(options =>
 builder.Services.AddRateLimiter(_ =>
 {
     _.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    _.OnRejected = (context, cancellationToken) =>
+    {
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            context.HttpContext.Response.Headers.RetryAfter =
+                ((int)retryAfter.TotalSeconds).ToString(NumberFormatInfo.InvariantInfo);
+        }
+
+        context.HttpContext.RequestServices.GetService<ILoggerFactory>()?
+            .CreateLogger("Microsoft.AspNetCore.RateLimitingMiddleware")
+            .LogWarning("OnRejected: RemoteIpAddress: {}", context.HttpContext.Connection.RemoteIpAddress);
+
+        context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+
+
+        return new ValueTask();
+    };
 
     _.GlobalLimiter = PartitionedRateLimiter.CreateChained(
-        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        PartitionedRateLimiter.Create<HttpContext, IPAddress>(httpContext =>
         {
-             var userAgent = httpContext.Request.Headers.UserAgent.ToString();
 
-            return RateLimitPartition.GetFixedWindowLimiter
-            (userAgent, _ =>
+            IPAddress? remoteIpAddress = httpContext.Connection.RemoteIpAddress;
+
+            if (!IPAddress.IsLoopback(remoteIpAddress!))
+            {
+
+                return RateLimitPartition.GetFixedWindowLimiter
+            (remoteIpAddress!, _ =>
                 new FixedWindowRateLimiterOptions
                 {
                     AutoReplenishment = true,
@@ -77,15 +100,23 @@ builder.Services.AddRateLimiter(_ =>
                     Window = TimeSpan.FromSeconds(10),
                     QueueLimit = 2,
                     QueueProcessingOrder = QueueProcessingOrder.OldestFirst
-           
+
                 });
+            }
+
+            return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+
+
         }),
 
-         PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+         PartitionedRateLimiter.Create<HttpContext, IPAddress>(httpContext =>
          {
-             var userAgent = httpContext.Request.Headers.UserAgent.ToString();
-             return RateLimitPartition.GetFixedWindowLimiter
-             (userAgent, _ =>
+             IPAddress? remoteIpAddress = httpContext.Connection.RemoteIpAddress;
+             if (!IPAddress.IsLoopback(remoteIpAddress!))
+             {
+
+                 return RateLimitPartition.GetFixedWindowLimiter
+             (remoteIpAddress!, _ =>
                  new FixedWindowRateLimiterOptions
                  {
                      AutoReplenishment = true,
@@ -94,14 +125,19 @@ builder.Services.AddRateLimiter(_ =>
 
 
                  });
+             }
+             return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+
          }),
 
-        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        PartitionedRateLimiter.Create<HttpContext, IPAddress>(httpContext =>
         {
-            var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+            IPAddress? remoteIpAddress = httpContext.Connection.RemoteIpAddress;
+            if (!IPAddress.IsLoopback(remoteIpAddress!))
+            {
 
-            return RateLimitPartition.GetFixedWindowLimiter
-            (userAgent, _ =>
+                return RateLimitPartition.GetFixedWindowLimiter
+            (remoteIpAddress!, _ =>
                 new FixedWindowRateLimiterOptions
                 {
                     AutoReplenishment = true,
@@ -109,6 +145,9 @@ builder.Services.AddRateLimiter(_ =>
                     Window = TimeSpan.FromDays(1),
 
                 });
+            }
+            return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
+
         }));
 });
 
@@ -133,8 +172,6 @@ if (app.Environment.IsDevelopment())
     app.UseCors(MyAllowSpecificOrigins);
 
 app.UseRateLimiter();
-
-
 
 app.UseAuthorization();
 
