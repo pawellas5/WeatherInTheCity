@@ -8,6 +8,7 @@ using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Services;
 using System.Threading.RateLimiting;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 var retryPolicy = HttpPolicyExtensions
@@ -60,19 +61,57 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddRateLimiter(_ =>
 {
+    _.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 
-    _.RejectionStatusCode = 429;
-    _.AddFixedWindowLimiter(policyName: "fixed", options =>
-    {
-        options.PermitLimit = 5;
-        options.Window = TimeSpan.FromSeconds(10);
-        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        options.QueueLimit = 3;
-        options.AutoReplenishment = true;
+    _.GlobalLimiter = PartitionedRateLimiter.CreateChained(
+        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        {
+             var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+
+            return RateLimitPartition.GetFixedWindowLimiter
+            (userAgent, _ =>
+                new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = 5,
+                    Window = TimeSpan.FromSeconds(10),
+                    QueueLimit = 2,
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+           
+                });
+        }),
+
+         PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+         {
+             var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+             return RateLimitPartition.GetFixedWindowLimiter
+             (userAgent, _ =>
+                 new FixedWindowRateLimiterOptions
+                 {
+                     AutoReplenishment = true,
+                     PermitLimit = 16,
+                     Window = TimeSpan.FromMinutes(1),
 
 
-    });
+                 });
+         }),
+
+        PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+        {
+            var userAgent = httpContext.Request.Headers.UserAgent.ToString();
+
+            return RateLimitPartition.GetFixedWindowLimiter
+            (userAgent, _ =>
+                new FixedWindowRateLimiterOptions
+                {
+                    AutoReplenishment = true,
+                    PermitLimit = 80,
+                    Window = TimeSpan.FromDays(1),
+
+                });
+        }));
 });
+
 
 
 
@@ -89,10 +128,12 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-app.UseRateLimiter();
 
 if (app.Environment.IsDevelopment())
     app.UseCors(MyAllowSpecificOrigins);
+
+app.UseRateLimiter();
+
 
 
 app.UseAuthorization();

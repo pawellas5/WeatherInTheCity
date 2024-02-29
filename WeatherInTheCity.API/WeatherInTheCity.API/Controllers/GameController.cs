@@ -9,7 +9,6 @@ namespace WeatherInTheCity.API.Controllers
 {
     [Route("game")]
     [ApiController]
-    [EnableRateLimiting("fixed")]
 
     public class GameController : ControllerBase
     {
