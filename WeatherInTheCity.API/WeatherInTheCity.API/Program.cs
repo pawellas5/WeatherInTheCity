@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Polly;
 using Polly.Extensions.Http;
@@ -5,6 +6,7 @@ using Polly.Timeout;
 using Serilog;
 using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Services;
+using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,23 +37,44 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ICityService, CityService>();
+
 builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
     .SetHandlerLifetime(TimeSpan.FromMinutes(3))
     .AddPolicyHandler(retryPolicy)
     .AddPolicyHandler(circuitBreakerPolicy)
     .AddPolicyHandler(timeoutPolicy);
+
 builder.Services.AddDbContext<WeatherInTheCityDbContext>(o =>
     o.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                      policy.AllowAnyMethod()
-                             .AllowAnyHeader()
-                             .WithOrigins("http://localhost:8080");
+                          policy.AllowAnyMethod()
+                                 .AllowAnyHeader()
+                                 .WithOrigins("http://localhost:8080");
+                      });
 });
+
+builder.Services.AddRateLimiter(_ =>
+{
+
+    _.RejectionStatusCode = 429;
+    _.AddFixedWindowLimiter(policyName: "fixed", options =>
+    {
+        options.PermitLimit = 5;
+        options.Window = TimeSpan.FromSeconds(10);
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 3;
+        options.AutoReplenishment = true;
+
+
+    });
 });
+
+
 
 var app = builder.Build();
 
@@ -65,6 +88,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseRateLimiter();
 
 if (app.Environment.IsDevelopment())
     app.UseCors(MyAllowSpecificOrigins);
