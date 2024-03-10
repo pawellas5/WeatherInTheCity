@@ -9,14 +9,17 @@
 
 <script>
 import { useRouter } from 'vue-router';
+import { onBeforeMount } from 'vue';
 import getQuestion from '../shared/getQuestion';
 
 export default {
   name: 'HomePage',
   setup() {
     const router = useRouter();
-    const startGame = async () => {
-      await getQuestion();
+
+    onBeforeMount(async () => { await getQuestion(); });
+
+    const startGame = () => {
       router.push('/game');
     };
 
