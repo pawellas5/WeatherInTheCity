@@ -85,13 +85,12 @@ export default {
       // check result
       if (cities.value[id].isCorrect) {
         alert('Correct!');
-        gameInfoStore.points += 1;
+        gameInfoStore.addPoint();
       } else {
         alert('Incorrect!');
       }
-
       if (gameInfoStore.questionNumber < gameInfoStore.questionTotal) {
-        gameInfoStore.questionNumber += 1;
+        gameInfoStore.nextQuestion();
         await getQuestion(); // to the next question
       } else {
         router.push({
@@ -110,9 +109,9 @@ export default {
         const answer = window.confirm(
           'Do you really want to leave and lose all your points?',
         );
-        if (answer) { gameInfoStore.questionNumber = 1; gameInfoStore.points = 0; }
+        if (answer) { gameInfoStore.reset(); }
       }
-      gameInfoStore.questionNumber = 1; gameInfoStore.points = 0;
+      gameInfoStore.reset();
     });
 
     return {

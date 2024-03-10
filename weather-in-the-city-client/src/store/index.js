@@ -32,5 +32,18 @@ export const useGameInfoStore = defineStore(
       questionTotal: 10,
 
     }),
+    actions: {
+      addPoint() {
+        this.points += 1;
+      },
+      nextQuestion() {
+        this.questionNumber += 1;
+      },
+      reset() {
+        this.points = 0;
+        this.questionNumber = 1;
+      },
+    },
+
   },
 );
