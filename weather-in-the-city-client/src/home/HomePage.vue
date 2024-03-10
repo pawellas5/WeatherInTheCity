@@ -15,7 +15,10 @@ export default {
   name: 'HomePage',
   setup() {
     const router = useRouter();
-    const startGame = async () => { await getQuestion(); router.push('/game'); };
+    const startGame = async () => {
+      await getQuestion();
+      router.push('/game');
+    };
 
     return {
       startGame,

@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia';
 import axios from 'axios';
 
-export default defineStore(
-  'gameStore',
+export const useGameDataStore = defineStore(
+  'gameData',
   {
     state: () => ({
       gameData: '',
@@ -19,5 +19,18 @@ export default defineStore(
           .catch((error) => { console.log(error); });
       },
     },
+  },
+);
+
+export const useGameInfoStore = defineStore(
+  'gameInfo',
+  {
+    state: () => ({
+
+      questionNumber: 1,
+      points: 0,
+      questionTotal: 10,
+
+    }),
   },
 );

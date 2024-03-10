@@ -1,5 +1,5 @@
-<template>
-    <div class="main">
+<template >
+    <div   class="main">
       <div   class="weather">
         <div class="temperature">
           {{Math.round(weather.main.temp)}}&deg;C
@@ -62,18 +62,61 @@
 
 <script>
 import { storeToRefs } from 'pinia';
-import useGameStore from '../store/index';
-import selectCity from './selectCity';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
+import getQuestion from '@/shared/getQuestion';
+import { useGameDataStore, useGameInfoStore } from '../store/index';
 
 export default {
   name: 'GamePage',
 
   setup() {
-    const store = useGameStore();
-    const { weather, cities } = storeToRefs(store);
+    const router = useRouter();
+    const gameDataStore = useGameDataStore();
+    const gameInfoStore = useGameInfoStore();
+
+    const { weather, cities } = storeToRefs(gameDataStore);
+
+    async function selectCity(id) {
+      const foundCity = cities.value[id];
+
+      // set isSelected property on the chosen city
+      foundCity.isSelected = true;
+
+      // check result
+      if (cities.value[id].isCorrect) {
+        alert('Correct!');
+        gameInfoStore.points += 1;
+      } else {
+        alert('Incorrect!');
+      }
+
+      if (gameInfoStore.questionNumber < gameInfoStore.questionTotal) {
+        gameInfoStore.questionNumber += 1;
+        await getQuestion(); // to the next question
+      } else {
+        router.push({
+          name: 'Result',
+          params: {
+            points: gameInfoStore.points,
+            totalPoints: gameInfoStore.questionNumber,
+          },
+        });
+      }
+    }
+
+    onBeforeRouteLeave(() => {
+      if (gameInfoStore.questionNumber < gameInfoStore.questionTotal) {
+        // eslint-disable-next-line no-alert
+        const answer = window.confirm(
+          'Do you really want to leave and lose all your points?',
+        );
+        if (answer) { gameInfoStore.questionNumber = 1; gameInfoStore.points = 0; }
+      }
+      gameInfoStore.questionNumber = 1; gameInfoStore.points = 0;
+    });
 
     return {
-      store,
+      gameDataStore,
       weather,
       cities,
       selectCity,

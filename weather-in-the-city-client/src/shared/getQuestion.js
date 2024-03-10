@@ -1,6 +1,6 @@
-import useGameStore from '../store/index';
+import { useGameDataStore } from '../store/index';
 
 export default async function getQuestion() {
-  const store = useGameStore();
+  const store = useGameDataStore();
   await store.getGameData();
 }
