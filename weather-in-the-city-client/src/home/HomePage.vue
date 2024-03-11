@@ -8,8 +8,7 @@
 </template>
 
 <script>
-import { useRouter } from 'vue-router';
-import { onBeforeMount } from 'vue';
+import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import getQuestion from '../shared/getQuestion';
 
 export default {
@@ -17,11 +16,23 @@ export default {
   setup() {
     const router = useRouter();
 
-    onBeforeMount(async () => { await getQuestion(); });
+    let canLeave = false;
+    function leave() { canLeave = true; }
+    const promise = getQuestion();
+    promise.then(() => { leave(); });
 
     const startGame = () => {
-      router.push('/game');
+      promise.then(() => { router.push('/game'); });
     };
+
+    onBeforeRouteLeave((to) => {
+      console.log(canLeave);
+
+      if (to.path === '/game') {
+        return canLeave;
+      }
+      return false;
+    });
 
     return {
       startGame,
