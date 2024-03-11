@@ -26,8 +26,6 @@ export default {
     };
 
     onBeforeRouteLeave((to) => {
-      console.log(canLeave);
-
       if (to.path === '/game') {
         return canLeave;
       }
