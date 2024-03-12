@@ -10,10 +10,13 @@
 <script>
 import { onBeforeRouteLeave, useRouter } from 'vue-router';
 import getQuestion from '../shared/getQuestion';
+import { useGameInfoStore } from '../store/index';
 
 export default {
   name: 'HomePage',
   setup() {
+    useGameInfoStore().reset();
+
     const router = useRouter();
 
     let canLeave = false;

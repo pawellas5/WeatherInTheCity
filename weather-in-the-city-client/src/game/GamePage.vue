@@ -93,25 +93,29 @@ export default {
         gameInfoStore.nextQuestion();
         await getQuestion(); // to the next question
       } else {
+        // mark the end of the game and redirect to the result page
+        gameInfoStore.questionNumber = gameInfoStore.questionTotal + 1;
         router.push({
           name: 'Result',
-          params: {
-            points: gameInfoStore.points,
-            totalPoints: gameInfoStore.questionNumber,
-          },
+
         });
       }
     }
 
-    onBeforeRouteLeave(() => {
-      if (gameInfoStore.questionNumber < gameInfoStore.questionTotal) {
+    onBeforeRouteLeave((to) => {
+      if (gameInfoStore.questionNumber <= gameInfoStore.questionTotal) {
+        if (to.name === 'Result') return false;
         // eslint-disable-next-line no-alert
         const answer = window.confirm(
           'Do you really want to leave and lose all your points?',
         );
-        if (answer) { gameInfoStore.reset(); }
+        if (answer) {
+          gameInfoStore.reset();
+          return true;
+        }
+        return false;
       }
-      gameInfoStore.reset();
+      return true; // when the game is over, go to the result page
     });
 
     return {

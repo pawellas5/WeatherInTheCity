@@ -15,7 +15,6 @@ export default createRouter({
       path: '/game',
       component: GamePage,
       beforeEnter: (to, from) => {
-        console.log(from.name);
         if (from.name === undefined) return { name: 'Home' };// on page refresh, go home
         return true;
       },
@@ -23,8 +22,12 @@ export default createRouter({
     },
     {
       name: 'Result',
-      path: '/result/:points/:totalPoints',
+      path: '/result',
       component: ResultPage,
+      beforeEnter: (to, from) => {
+        if (from.name === 'Home' || from.name === undefined) return { name: 'Home' };
+        return true;
+      },
 
     },
   ],

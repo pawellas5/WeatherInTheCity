@@ -1,24 +1,27 @@
 <template>
     <div class="result">
-        Your score is {{ points }} out of {{ totalPoints }}.
+        Your score is {{ points }} out of {{ questionTotal }}.
     </div>
 
   </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useGameInfoStore } from '../store/index';
 
 export default {
   name: 'ResultPage',
+
   setup() {
-    const route = useRoute();
-    const { points, totalPoints } = route.params;
+    const gameInfoStore = useGameInfoStore();
+    const { points, questionTotal } = gameInfoStore;
+    gameInfoStore.reset();
 
     return {
       points,
-      totalPoints,
+      questionTotal,
     };
   },
+
 };
 
 </script>
