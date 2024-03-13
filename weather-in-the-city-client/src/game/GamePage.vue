@@ -13,7 +13,8 @@
 
       </div>
       <div class="cities">
-        <button @click=" selectCity(0)" class="btn">
+        <button @click=" selectCity(0)" v-bind:class="[{btnColorCorrect:isCorrect[ind]}
+        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]" class="btn">
 
           <div class=cityName>
             {{cities[0].cityName}}
@@ -24,7 +25,8 @@
 
         </button>
 
-        <button @click="selectCity(1)" class="btn">
+        <button @click="selectCity(1)"  v-bind:class="[{btnColorCorrect:isCorrect[ind]}
+        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]"  class="btn">
 
           <div class=cityName>
             {{cities[1].cityName}}
@@ -33,7 +35,8 @@
             ({{cities[1].countryName}})
           </div></button>
 
-        <button @click="selectCity(2)" class="btn">
+        <button @click="selectCity(2)"  v-bind:class="[{btnColorCorrect:isCorrect[ind]}
+        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]"  class="btn">
 
           <div class=cityName>
             {{cities[2].cityName}}
@@ -44,7 +47,8 @@
 
         </button>
 
-        <button @click="selectCity(3)" class="btn">
+        <button @click="selectCity(3)" v-bind:class="[{btnColorCorrect:isCorrect[ind]}
+        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]" class="btn">
 
           <div class=cityName>
             {{cities[3].cityName}}
@@ -65,6 +69,10 @@ import { storeToRefs } from 'pinia';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import getQuestion from '@/shared/getQuestion';
 import { useGameDataStore, useGameInfoStore } from '../store/index';
+import sleep from './sleep';
+import {
+  isCorrect, isIncorrect, isGreyedOut, setBtnFlags, resetBtnFlags,
+} from './buttonFlags';
 
 export default {
   name: 'GamePage',
@@ -73,24 +81,20 @@ export default {
     const router = useRouter();
     const gameDataStore = useGameDataStore();
     const gameInfoStore = useGameInfoStore();
-
+    let ind = null;
     const { weather, cities } = storeToRefs(gameDataStore);
 
     async function selectCity(id) {
-      const foundCity = cities.value[id];
+      ind = id;
+      // console.log(`Points: ${gameInfoStore.points}`);
+      // console.log(`QuestionNumber: ${gameInfoStore.questionNumber}`);
 
-      // set isSelected property on the chosen city
-      foundCity.isSelected = true;
+      setBtnFlags(id);
 
-      // check result
-      if (cities.value[id].isCorrect) {
-        alert('Correct!');
-        gameInfoStore.addPoint();
-      } else {
-        alert('Incorrect!');
-      }
+      await sleep(1000);
       if (gameInfoStore.questionNumber < gameInfoStore.questionTotal) {
         gameInfoStore.nextQuestion();
+
         await getQuestion(); // to the next question
       } else {
         // mark the end of the game and redirect to the result page
@@ -100,6 +104,7 @@ export default {
 
         });
       }
+      resetBtnFlags();
     }
 
     onBeforeRouteLeave((to) => {
@@ -123,6 +128,11 @@ export default {
       weather,
       cities,
       selectCity,
+      isCorrect,
+      isIncorrect,
+      isGreyedOut,
+      ind,
+
     };
   },
 };
@@ -139,9 +149,28 @@ export default {
     color:white;
     font-size: 2rem;
   }
+
+  .btnColorCorrect{
+    pointer-events: none;
+    background-color:green;
+
+  }
+
+  .btnColorIncorrect{
+    pointer-events: none;
+    background-color:red;
+
+  }
+
+  .btnColorGreyedOut{
+    pointer-events: none;
+    background-color:grey;
+
+  }
   .btn:hover{
     cursor:pointer;
-    background-color:#ff9300;
+    /* background-color:#ff9300; */
+    opacity:0.8;
 
   }
 .cities .btn{
