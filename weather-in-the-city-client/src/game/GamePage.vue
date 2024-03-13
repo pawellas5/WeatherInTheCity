@@ -13,8 +13,8 @@
 
       </div>
       <div class="cities">
-        <button @click=" selectCity(0)" v-bind:class="[{btnColorCorrect:isCorrect[ind]}
-        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]" class="btn">
+        <button @click=" selectCity(0)" v-bind:class="[{btnColorCorrect:isCorrect[0]}
+        ,{btnColorIncorrect:isIncorrect[0]},{btnColorGreyedOut:isGreyedOut[0]}]" class="btn">
 
           <div class=cityName>
             {{cities[0].cityName}}
@@ -25,8 +25,8 @@
 
         </button>
 
-        <button @click="selectCity(1)"  v-bind:class="[{btnColorCorrect:isCorrect[ind]}
-        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]"  class="btn">
+        <button @click="selectCity(1)"  v-bind:class="[{btnColorCorrect:isCorrect[1]}
+        ,{btnColorIncorrect:isIncorrect[1]},{btnColorGreyedOut:isGreyedOut[1]}]"  class="btn">
 
           <div class=cityName>
             {{cities[1].cityName}}
@@ -35,8 +35,8 @@
             ({{cities[1].countryName}})
           </div></button>
 
-        <button @click="selectCity(2)"  v-bind:class="[{btnColorCorrect:isCorrect[ind]}
-        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]"  class="btn">
+        <button @click="selectCity(2)"  v-bind:class="[{btnColorCorrect:isCorrect[2]}
+        ,{btnColorIncorrect:isIncorrect[2]},{btnColorGreyedOut:isGreyedOut[2]}]"  class="btn">
 
           <div class=cityName>
             {{cities[2].cityName}}
@@ -47,8 +47,8 @@
 
         </button>
 
-        <button @click="selectCity(3)" v-bind:class="[{btnColorCorrect:isCorrect[ind]}
-        ,{btnColorIncorrect:isIncorrect[ind]},{btnColorGreyedOut:isGreyedOut[ind]}]" class="btn">
+        <button @click="selectCity(3)" v-bind:class="[{btnColorCorrect:isCorrect[3]}
+        ,{btnColorIncorrect:isIncorrect[3]},{btnColorGreyedOut:isGreyedOut[3]}]" class="btn">
 
           <div class=cityName>
             {{cities[3].cityName}}
