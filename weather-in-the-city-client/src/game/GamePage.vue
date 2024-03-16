@@ -13,48 +13,52 @@
 
       </div>
       <div class="cities">
-        <button @click=" selectCity(0)" v-bind:class="[{btnColorCorrect:isCorrect[0]}
-        ,{btnColorIncorrect:isIncorrect[0]},{btnColorGreyedOut:isGreyedOut[0]}]" class="btn">
+        <button @click=" selectCity(button1)" v-bind:class="[{btnColorCorrect:isCorrect[button1]}
+        ,{btnColorIncorrect:isIncorrect[button1]},{btnColorGreyedOut:isGreyedOut[button1]}]"
+          class="btn">
 
           <div class=cityName>
-            {{cities[0].cityName}}
+            {{cities[button1].cityName}}
           </div>
           <div class=countryName>
-            ({{cities[0].countryName}})
+            ({{cities[button1].countryName}})
           </div>
 
         </button>
 
-        <button @click="selectCity(1)"  v-bind:class="[{btnColorCorrect:isCorrect[1]}
-        ,{btnColorIncorrect:isIncorrect[1]},{btnColorGreyedOut:isGreyedOut[1]}]"  class="btn">
+        <button @click="selectCity(button2)"  v-bind:class="[{btnColorCorrect:isCorrect[button2]}
+        ,{btnColorIncorrect:isIncorrect[button2]},{btnColorGreyedOut:isGreyedOut[button2]}]"
+          class="btn">
 
           <div class=cityName>
-            {{cities[1].cityName}}
+            {{cities[button2].cityName}}
           </div>
           <div  class=countryName>
-            ({{cities[1].countryName}})
+            ({{cities[button2].countryName}})
           </div></button>
 
-        <button @click="selectCity(2)"  v-bind:class="[{btnColorCorrect:isCorrect[2]}
-        ,{btnColorIncorrect:isIncorrect[2]},{btnColorGreyedOut:isGreyedOut[2]}]"  class="btn">
+        <button @click="selectCity(button3)"  v-bind:class="[{btnColorCorrect:isCorrect[button3]}
+        ,{btnColorIncorrect:isIncorrect[button3]},{btnColorGreyedOut:isGreyedOut[button3]}]"
+          class="btn">
 
           <div class=cityName>
-            {{cities[2].cityName}}
+            {{cities[button3].cityName}}
           </div>
           <div class=countryName>
-            ({{cities[2].countryName}})
+            ({{cities[button3].countryName}})
           </div>
 
         </button>
 
-        <button @click="selectCity(3)" v-bind:class="[{btnColorCorrect:isCorrect[3]}
-        ,{btnColorIncorrect:isIncorrect[3]},{btnColorGreyedOut:isGreyedOut[3]}]" class="btn">
+        <button @click="selectCity(button4)" v-bind:class="[{btnColorCorrect:isCorrect[button4]}
+        ,{btnColorIncorrect:isIncorrect[button4]},{btnColorGreyedOut:isGreyedOut[button4]}]"
+          class="btn">
 
           <div class=cityName>
-            {{cities[3].cityName}}
+            {{cities[button4].cityName}}
           </div>
           <div class=countryName>
-            ({{cities[3].countryName}})
+            ({{cities[button4].countryName}})
           </div>
 
         </button>
@@ -81,14 +85,10 @@ export default {
     const router = useRouter();
     const gameDataStore = useGameDataStore();
     const gameInfoStore = useGameInfoStore();
-    let ind = null;
     const { weather, cities } = storeToRefs(gameDataStore);
-
     async function selectCity(id) {
-      ind = id;
       // console.log(`Points: ${gameInfoStore.points}`);
       // console.log(`QuestionNumber: ${gameInfoStore.questionNumber}`);
-
       setBtnFlags(id);
 
       await sleep(1000);
@@ -124,6 +124,10 @@ export default {
     });
 
     return {
+      button1: 0,
+      button2: 1,
+      button3: 2,
+      button4: 3,
       gameDataStore,
       weather,
       cities,
@@ -131,7 +135,6 @@ export default {
       isCorrect,
       isIncorrect,
       isGreyedOut,
-      ind,
 
     };
   },
