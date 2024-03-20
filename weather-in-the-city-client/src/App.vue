@@ -5,6 +5,13 @@
         <router-link class="link" to="/">WeatherInTheCity</router-link>
         <img  src="./assets/weather_logo.png" alt="logo">
       </li>
+      <li class="space">
+
+      </li>
+      <li class="navBtns">
+        <!-- signup, login, logout -->
+        <NavbarButtons/>
+      </li>
     </ul>
   </nav>
   <div class="content">
@@ -18,10 +25,16 @@
 </template>
 
 <script>
+import NavbarButtons from './authentication/buttons/NavbarButtons.vue';
 
 export default {
   name: 'App',
+  components: {
+    NavbarButtons,
+  },
+
 };
+
 </script>
 
 <style>
@@ -29,6 +42,13 @@ export default {
   margin:0;
   padding:0;
   box-sizing: border-box;
+}
+.navBtns{
+  width:300px;
+
+}
+.space{
+  flex-grow: 1;
 }
 
 .logo{
@@ -89,7 +109,7 @@ footer a:hover{
   background-color: #233, 234, 237;
   flex-grow:1;
   padding:0rem 20rem 0rem 20rem;
-  /* marginesy z lewej i prawej dla glownego contentu */
+  /* main horizontal margins */
 
   border-top: 20px solid #1d1f20;
   border-bottom: 20px solid #1d1f20;
