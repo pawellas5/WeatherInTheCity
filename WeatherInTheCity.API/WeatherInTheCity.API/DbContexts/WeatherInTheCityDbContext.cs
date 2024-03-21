@@ -150,5 +150,7 @@ namespace WeatherInTheCity.API.DbContexts
         }
 
         public DbSet<City> Cities { get; set; }
+        public DbSet<UserStats> UserStats { get; set; }
+
     }
 }
