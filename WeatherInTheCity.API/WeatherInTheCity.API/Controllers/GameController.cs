@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WeatherInTheCity.API.Models;
 using WeatherInTheCity.API.Services;
 
@@ -19,6 +20,7 @@ namespace WeatherInTheCity.API.Controllers
         }
 
         [HttpGet]
+        //[Authorize]
         public async Task<ActionResult<GameDataDTO>> Get()
         {
 
