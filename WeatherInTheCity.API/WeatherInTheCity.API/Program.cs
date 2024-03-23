@@ -70,7 +70,9 @@ builder.Services.AddSwaggerGen(
         }
 
     );
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICityService, CityService>();
+builder.Services.AddScoped<IUserStatsService,UserStatsService>();
 
 builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
     .SetHandlerLifetime(TimeSpan.FromMinutes(3))
