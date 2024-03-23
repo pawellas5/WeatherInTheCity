@@ -17,8 +17,7 @@ namespace WeatherInTheCity.API.Services
 
         public async Task AddOrUpdate(UserStatsDTO userStatsDTO, string userId)
         {
-            UserStats userStats = new UserStats() { UserId = userId, Defeats = userStatsDTO.Defeats, Wins = userStatsDTO.Wins, Games = userStatsDTO.Games };
-            FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userStats.UserId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Defeats = {userStats.Defeats}, Wins = {userStats.Wins}, Games = {userStats.Games} WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userStats.UserId},{userStats.Wins},{userStats.Defeats},{userStats.Games});";
+            FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Defeats = Defeats + {userStatsDTO.Defeats}, Wins = Wins + {userStatsDTO.Wins}, Games = Games + {userStatsDTO.Games} WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userId},{userStatsDTO.Wins},{userStatsDTO.Defeats},{userStatsDTO.Games});";
             Console.WriteLine($"myCommand: {myCommand}");
             await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
 

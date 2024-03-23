@@ -46,4 +46,37 @@ export const useGameInfoStore = defineStore(
     },
 
   },
+
+);
+
+export const useUserStatsStore = defineStore(
+  'userStats',
+  {
+
+    actions: {
+      addUserStats(accessToken, _wins, _defeats, _games) {
+        return axios({
+          method: 'put',
+          url: 'https://localhost:7172/user/stats',
+          data: {
+            wins: _wins,
+            defeats: _defeats,
+            games: _games,
+          },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+
+        })
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+    },
+
+  },
+
 );

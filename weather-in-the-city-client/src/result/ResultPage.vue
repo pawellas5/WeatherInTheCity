@@ -1,6 +1,6 @@
 <template>
     <div class="result">
-        Your score is {{ points }} out of {{ questionTotal }}.
+        Your score is {{ result }}%.
     </div>
 
   </template>
@@ -14,11 +14,11 @@ export default {
   setup() {
     const gameInfoStore = useGameInfoStore();
     const { points, questionTotal } = gameInfoStore;
+    const result = (points / questionTotal) * 100;
     gameInfoStore.reset();
 
     return {
-      points,
-      questionTotal,
+      result,
     };
   },
 

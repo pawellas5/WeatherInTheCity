@@ -92,7 +92,9 @@
 import { storeToRefs } from 'pinia';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import getQuestion from '@/shared/getQuestion';
-import { useGameDataStore, useGameInfoStore } from '../store/index';
+import { useAuth0 } from '@auth0/auth0-vue';
+import { computed } from 'vue';
+import { useGameDataStore, useGameInfoStore, useUserStatsStore } from '../store/index';
 import sleep from './sleep';
 import setWeatherFlags from './weatherIconFlags';
 import {
@@ -107,6 +109,8 @@ export default {
     const gameDataStore = useGameDataStore();
     const gameInfoStore = useGameInfoStore();
     const { weather, cities } = storeToRefs(gameDataStore);
+    const { points, questionTotal } = storeToRefs(gameInfoStore);
+
     const {
       isClearSky,
       isDrizzle,
@@ -117,6 +121,16 @@ export default {
       isSnow,
       isStorm,
     } = setWeatherFlags(weather);
+    const userStatsStore = useUserStatsStore();
+    const { isAuthenticated } = useAuth0();
+
+    const { getAccessTokenSilently } = useAuth0();
+
+    const addUserStats = async (wins, defeats, games) => {
+      const accessToken = await getAccessTokenSilently();
+      await userStatsStore.addUserStats(accessToken, wins, defeats, games);
+    };
+
     async function selectCity(id) {
     // console.log(`Points: ${gameInfoStore.points}`);
     // console.log(`QuestionNumber: ${gameInfoStore.questionNumber}`);
@@ -128,7 +142,13 @@ export default {
 
         await getQuestion(); // to the next question
       } else {
-      // mark the end of the game and redirect to the result page
+        if (isAuthenticated.value) {
+          const result = computed(() => (points.value / questionTotal.value) * 100);
+          if (result.value >= 50) addUserStats(1, 0, 1);// win
+          else addUserStats(0, 1, 1);// defeat
+        }
+
+        // mark the end of the game and redirect to the result page
         gameInfoStore.questionNumber = gameInfoStore.questionTotal + 1;
         router.push({
           name: 'Result',
