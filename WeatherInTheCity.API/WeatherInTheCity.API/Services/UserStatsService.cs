@@ -21,6 +21,12 @@ namespace WeatherInTheCity.API.Services
             Console.WriteLine($"myCommand: {myCommand}");
             await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
 
+        }
+        public async Task<UserStatsDTO> GetByUserId(string userId)
+        {
+            var userStats = await _context.UserStats.FirstOrDefaultAsync(u => u.UserId == userId);
+            if (userStats == null) return null!;
+            return new UserStatsDTO() { Defeats = userStats.Defeats, Wins = userStats.Wins, Games = userStats.Games };
 
         }
 
