@@ -52,6 +52,9 @@ export const useGameInfoStore = defineStore(
 export const useUserStatsStore = defineStore(
   'userStats',
   {
+    state: () => ({
+      userStats: '',
+    }),
 
     actions: {
       addUserStats(accessToken, _wins, _defeats, _games) {
@@ -69,6 +72,25 @@ export const useUserStatsStore = defineStore(
 
         })
           .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+
+      getUserStats(accessToken) {
+        console.log(accessToken);
+        return axios({
+          method: 'get',
+          url: 'https://localhost:7172/user/stats',
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+
+        })
+          .then((response) => {
+            this.userStats = response.data;
             console.log(response);
           })
           .catch((error) => {

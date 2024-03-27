@@ -4,6 +4,7 @@ import HomePage from '../home/HomePage.vue';
 import GamePage from '../game/GamePage.vue';
 import ResultPage from '../result/ResultPage.vue';
 import CallbackPage from '../authentication/callback/CallbackPage.vue';
+import ProfilePage from '../profile/ProfilePage.vue';
 
 export default createRouter({
   routes: [
@@ -29,6 +30,16 @@ export default createRouter({
       component: ResultPage,
       beforeEnter: (to, from) => {
         if (from.name === 'Home' || from.name === undefined) return { name: 'Home' };
+        return true;
+      },
+
+    },
+    {
+      name: 'Profile',
+      path: '/profile',
+      component: ProfilePage,
+      beforeEnter: (to, from) => {
+        if (from.name === undefined) return { name: 'Home' };
         return true;
       },
 

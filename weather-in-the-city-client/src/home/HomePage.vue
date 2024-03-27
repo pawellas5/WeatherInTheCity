@@ -30,7 +30,7 @@ export default {
     };
 
     onBeforeRouteLeave((to) => {
-      if (to.path === '/game') {
+      if (to.path === '/game' || to.path === '/profile') {
         return canLeave;
       }
       return false;
