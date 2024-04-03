@@ -28,16 +28,14 @@ function setBtnFlags(id) {
   const gameInfoStore = useGameInfoStore();
 
   const { cities } = storeToRefs(gameDataStore);
-  const foundCity = cities.value[id];
-  // set isSelected property on the chosen city
-  foundCity.isSelected = true;
-  // check result
-  if (cities.value[id].isCorrect) {
+
+  // check the result
+  if (cities.value[id].cityName === gameDataStore.correctAnswer) {
     isCorrect.value[id] = true;
     gameInfoStore.addPoint();
   } else {
     isIncorrect.value[id] = true;
-    const correctId = cities.value.findIndex((el) => el.isCorrect === true);
+    const correctId = cities.value.findIndex((el) => el.cityName === gameDataStore.correctAnswer);
     isCorrect.value[correctId] = true; // show the correct answer
   }
   greyOutButtons();

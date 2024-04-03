@@ -6,17 +6,54 @@ export const useGameDataStore = defineStore(
   {
     state: () => ({
       gameData: '',
+      guessResult: '',
     }),
     getters: {
       weather: (state) => state.gameData.weather,
       cities: (state) => state.gameData.cities,
+      gameFlowId: (state) => state.gameData.gameFlowId,
+
+      isUserCorrect: (state) => state.guessResult.isUserCorrect,
+      userAnswer: (state) => state.guessResult.userAnswer,
+      correctAnswer: (state) => state.guessResult.correctAnswer,
+
     },
     actions:
     {
-      getGameData() {
-        return axios.get('https://localhost:7172/game/')
+      getGameData(gameId = null) {
+        return axios.get('https://localhost:7172/game/', {
+          headers: {
+            gameFlowId: gameId,
+          },
+        })
           .then((response) => { this.gameData = response.data; })
           .catch((error) => { console.log(error); });
+      },
+
+      postAnswer(questionNumber, city, gameId) {
+        return axios({
+          method: 'post',
+          url: 'https://localhost:7172/game/check',
+          data: {
+            QuestionNumber: questionNumber,
+            City: city,
+          },
+          headers: {
+            gameFlowId: gameId,
+          },
+
+        })
+          .then((response) => { this.guessResult = response.data; })
+          .catch((error) => { console.log(error); });
+      },
+
+      removeCurrentGame(gameId) {
+        return axios.delete('https://localhost:7172/game/gameflow/', {
+          headers: {
+            gameFlowId: gameId,
+          },
+        })
+          .catch((error) => console.log(error));
       },
     },
   },
@@ -71,9 +108,6 @@ export const useUserStatsStore = defineStore(
           },
 
         })
-          .then((response) => {
-            console.log(response);
-          })
           .catch((error) => {
             console.log(error);
           });
@@ -91,7 +125,6 @@ export const useUserStatsStore = defineStore(
         })
           .then((response) => {
             this.userStats = response.data;
-            console.log(response);
           })
           .catch((error) => {
             console.log(error);

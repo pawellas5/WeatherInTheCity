@@ -11,13 +11,16 @@
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 
 import getQuestion from '../shared/getQuestion';
-import { useGameInfoStore } from '../store/index';
+import { useGameInfoStore, useGameDataStore } from '../store/index';
+
+window.addEventListener('beforeunload', () => { useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
 
 export default {
   name: 'HomePage',
   setup() {
     useGameInfoStore().reset();
 
+    const gameDataStore = useGameDataStore();
     const router = useRouter();
 
     let canLeave = false;
@@ -31,6 +34,7 @@ export default {
 
     onBeforeRouteLeave((to) => {
       if (to.path === '/game' || to.path === '/profile') {
+        if (to.path !== '/game') gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
         return canLeave;
       }
       return false;

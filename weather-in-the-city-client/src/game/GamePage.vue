@@ -101,6 +101,8 @@ import {
   isCorrect, isIncorrect, isGreyedOut, setBtnFlags, resetBtnFlags,
 } from './buttonFlags';
 
+window.addEventListener('beforeunload', () => { useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
+
 export default {
   name: 'GamePage',
 
@@ -134,14 +136,23 @@ export default {
     async function selectCity(id) {
     // console.log(`Points: ${gameInfoStore.points}`);
     // console.log(`QuestionNumber: ${gameInfoStore.questionNumber}`);
+
+      const selectedCity = cities.value[id].cityName;
+
+      await gameDataStore.postAnswer(
+        gameInfoStore.questionNumber,
+        selectedCity,
+        gameDataStore.gameFlowId,
+      );
       setBtnFlags(id);
 
       await sleep(1000);
       if (gameInfoStore.questionNumber < gameInfoStore.questionTotal) {
         gameInfoStore.nextQuestion();
-
-        await getQuestion(); // to the next question
+        await getQuestion(gameDataStore.gameFlowId); // to the next question
       } else {
+        gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
+
         if (isAuthenticated.value) {
           const result = computed(() => (points.value / questionTotal.value) * 100);
           if (result.value >= 50) addUserStats(1, 0, 1);// win
@@ -167,6 +178,7 @@ export default {
         );
         if (answer) {
           gameInfoStore.reset();
+          gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
           return true;
         }
         return false;
