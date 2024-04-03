@@ -4,5 +4,6 @@
     {
         public OpenWeatherDTO? Weather { get; set; }
         public List<CityDTO>? Cities { get; set; }
+        public string? GameFlowId { get; set; }
     }
 }

@@ -147,10 +147,13 @@ namespace WeatherInTheCity.API.DbContexts
                 new City() { Id = id++, CityName = "Prague", CountryName = "Czech Republic", CountryCode = "cz" },
                 new City() { Id = id++, CityName = "Budapest", CountryName = "Hungary", CountryCode = "hu" }
         });
+
+
         }
 
         public DbSet<City> Cities { get; set; }
         public DbSet<UserStats> UserStats { get; set; }
+        public DbSet<GameFlow> GameFlows { get; set; }
 
     }
 }
