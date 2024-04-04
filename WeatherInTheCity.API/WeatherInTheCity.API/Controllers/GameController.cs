@@ -7,6 +7,7 @@ namespace WeatherInTheCity.API.Controllers
     [Route("game")]
     [ApiController]
 
+
     public class GameController : ControllerBase
     {
         private readonly IOpenWeatherService _openWeatherService;
@@ -19,7 +20,6 @@ namespace WeatherInTheCity.API.Controllers
             _citiesService = citiesService;
             _gameFlowService = gameFlowService;
         }
-
         [HttpGet]
         //[Authorize]
         public async Task<ActionResult<GameDataDTO>> Get([FromHeader] string? gameFlowId)
@@ -42,11 +42,11 @@ namespace WeatherInTheCity.API.Controllers
 
             if (gameFlowId == null) // null, because it's the first question
             {
-                gameFlowId = await _gameFlowService.CreateGameFlow(correctCity!.CityName); 
+                gameFlowId = await _gameFlowService.CreateGameFlow(correctCity!.CityName);
             }
             else
-            {               
-                gameFlowId = await _gameFlowService.AddQuestion(correctCity!.CityName, gameFlowId!); 
+            {
+                gameFlowId = await _gameFlowService.AddQuestion(correctCity!.CityName, gameFlowId!);
             }
 
 
@@ -60,25 +60,22 @@ namespace WeatherInTheCity.API.Controllers
         public async Task<ActionResult<AnswerResultDTO>> CheckAnswer(AnswerDTO answer, [FromHeader] string gameFlowId)
         {
 
-            var correctAnswer = await _gameFlowService.GetCorrectAnswer(gameFlowId, answer.QuestionNumber);
+            var answerResultDTO = await _gameFlowService.GetCorrectAnswer(gameFlowId, answer.QuestionNumber);
 
-            var isCorrect = (answer.City.ToLower() == correctAnswer.ToLower()) && (answer.City != string.Empty); //check the answer
+            var isCorrect = (answer.City.ToLower() == answerResultDTO.CorrectAnswer.ToLower()) && (answer.City != string.Empty); //check the answer
 
             if (isCorrect)
             {
-                await _gameFlowService.GivePoint(answer.QuestionNumber, gameFlowId);
+                answerResultDTO.TotalPoints = await _gameFlowService.GivePoint(answer.QuestionNumber, gameFlowId);
             }
 
-            var answerResult = new AnswerResultDTO();
-            answerResult.IsUserCorrect = isCorrect;
-            answerResult.UserAnswer = answer.City;
-            answerResult.CorrectAnswer = correctAnswer;
-            answerResult.GameFlowId = gameFlowId;
+            answerResultDTO.IsUserCorrect = isCorrect;
+            answerResultDTO.UserAnswer = answer.City;
+            answerResultDTO.GameFlowId = gameFlowId;
 
 
-            return Ok(answerResult);
+            return Ok(answerResultDTO);
         }
-
         [HttpDelete("gameflow")]
         public async Task<ActionResult> RemoveGameFlow([FromHeader] string? gameFlowId)
         {

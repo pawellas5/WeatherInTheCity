@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Entities;
+using WeatherInTheCity.API.Models;
 
 namespace WeatherInTheCity.API.Services
 {
@@ -20,7 +21,6 @@ namespace WeatherInTheCity.API.Services
             var question = new Question();
             question.QuestionNumber = 1;
             question.CorrectAnswer = correctCity;
-            question.UserAnswer = null;
             question.UserPoint = false;
 
             var questionList = new QuestionList();
@@ -31,7 +31,6 @@ namespace WeatherInTheCity.API.Services
             var gameFlow = new GameFlow();
             gameFlow.Id = guid;
             gameFlow.Question = SerializeList(questionList);
-            gameFlow.UserId = null;
             gameFlow.LastUpdate = DateTime.Now;
 
 
@@ -58,7 +57,7 @@ namespace WeatherInTheCity.API.Services
                 lastQuestionNumber = question.QuestionNumber > lastQuestionNumber ? question.QuestionNumber : lastQuestionNumber;
             }
 
-            var newQuestion = new Question() { QuestionNumber = ++lastQuestionNumber, CorrectAnswer = correctCity, UserAnswer = null, UserPoint = false };
+            var newQuestion = new Question() { QuestionNumber = ++lastQuestionNumber, CorrectAnswer = correctCity, UserPoint = false };
             questionList.Questions.Add(newQuestion);
 
             gameFlow.Question = SerializeList(questionList);
@@ -66,29 +65,41 @@ namespace WeatherInTheCity.API.Services
 
             return guid.ToString();
         }
-
-        public async Task<string> GivePoint(int questionId, string gameFlowId)
+        
+        /// <param name="questionId"></param>
+        /// <param name="gameFlowId"></param>
+        /// <returns>Total points</returns>
+        public async Task<int?> GivePoint(int questionId, string gameFlowId)
         {
 
             var guid = Guid.Parse(gameFlowId);
             var gameFlow = await _context.GameFlows.Where(r => r.Id == guid).FirstOrDefaultAsync();
 
-            if (gameFlow == null) return null!;
+            if (gameFlow == null) return null;
 
             gameFlow.LastUpdate = DateTime.Now;
             var questionList = DeserializeList(gameFlow.Question);
             var question = questionList.Questions!.Where(q => q.QuestionNumber == questionId).FirstOrDefault();
 
-            if(question != null)
-            {
-                question.UserPoint = true;
-                gameFlow.Question = SerializeList(questionList);
-                await _context.SaveChangesAsync();
-            }         
+            if (question == null) return questionList.TotalPoints;
 
-            return guid.ToString();
+            question.UserPoint = true;
+
+            var result = 0;
+            foreach (var q in questionList.Questions)
+            {
+                if (q.UserPoint == true) ++result;
+            }
+            questionList.TotalPoints = result;
+
+            gameFlow.Question = SerializeList(questionList);
+            await _context.SaveChangesAsync();
+
+
+            return questionList.TotalPoints;
 
         }
+
 
         public async Task RemoveGameFlow(string gameFlowId)
         {
@@ -103,7 +114,7 @@ namespace WeatherInTheCity.API.Services
         }
 
 
-        public async Task<string> GetCorrectAnswer(string gameFlowId, int questionNumber)
+        public async Task<AnswerResultDTO> GetCorrectAnswer(string gameFlowId, int questionNumber)
         {
             var guid = Guid.Parse(gameFlowId);
             var gameFlow = await _context.GameFlows.Where(r => r.Id == guid).FirstOrDefaultAsync();
@@ -113,7 +124,7 @@ namespace WeatherInTheCity.API.Services
             var questionList = DeserializeList(gameFlow.Question);
             var correctAnswer = String.Empty;
 
-            foreach(var question in questionList.Questions!)
+            foreach (var question in questionList.Questions!)
             {
                 if (question.QuestionNumber == questionNumber)
                 {
@@ -122,7 +133,11 @@ namespace WeatherInTheCity.API.Services
                 }
             }
 
-            return correctAnswer;
+            var answerResultDTO = new AnswerResultDTO();
+            answerResultDTO.CorrectAnswer = correctAnswer;
+            answerResultDTO.TotalPoints = questionList.TotalPoints;
+
+            return answerResultDTO;
 
         }
 

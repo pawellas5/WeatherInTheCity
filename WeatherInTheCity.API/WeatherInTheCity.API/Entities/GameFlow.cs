@@ -8,7 +8,6 @@ namespace WeatherInTheCity.API.Entities
     {
   
         public Guid Id { get; set; }
-        public string? UserId { get; set; }
         [Required]
         public string Question { get; set; } = string.Empty;
         public DateTime? LastUpdate { get; set; }
