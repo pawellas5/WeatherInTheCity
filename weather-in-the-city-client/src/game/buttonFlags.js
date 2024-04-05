@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
-import { useGameDataStore, useGameInfoStore } from '../store/index';
+import { useGameDataStore } from '../store/index';
 
 const isCorrect = ref([false, false, false, false]);
 const isIncorrect = ref([false, false, false, false]);
@@ -17,6 +17,7 @@ function greyOutButtons() {
   }
   return isGreyedOut;
 }
+
 function resetBtnFlags() {
   isCorrect.value = [false, false, false, false];
   isIncorrect.value = [false, false, false, false];
@@ -25,14 +26,11 @@ function resetBtnFlags() {
 
 function setBtnFlags(id) {
   const gameDataStore = useGameDataStore();
-  const gameInfoStore = useGameInfoStore();
-
   const { cities } = storeToRefs(gameDataStore);
 
   // check the result
   if (cities.value[id].cityName === gameDataStore.correctAnswer) {
     isCorrect.value[id] = true;
-    gameInfoStore.addPoint();
   } else {
     isIncorrect.value[id] = true;
     const correctId = cities.value.findIndex((el) => el.cityName === gameDataStore.correctAnswer);

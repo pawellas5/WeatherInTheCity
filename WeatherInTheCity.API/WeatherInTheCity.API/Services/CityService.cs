@@ -1,7 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Polly;
-using System.Reflection.Metadata.Ecma335;
 using WeatherInTheCity.API.DbContexts;
 using WeatherInTheCity.API.Entities;
 using WeatherInTheCity.API.Models;
@@ -36,11 +33,9 @@ namespace WeatherInTheCity.API.Services
              (await Get4CitiesById(randIndices))
                  .ForEach(c => possibleCitiesInit.Add(new CityDTO() { CityName = c.CityName, CountryName = c.CountryName , CountryCode = c.CountryCode}));
 
-            possibleCitiesInit[0].isCorrect=true;
+            
 
-            var possibleCities = possibleCitiesInit.OrderBy(c => c.CityName.GetHashCode()).ToList();
-
-            return possibleCities;
+            return possibleCitiesInit;
 
         }
 

@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
-using WeatherInTheCity.API.Models;
 using WeatherInTheCity.API.Services;
 
 namespace WeatherInTheCity.API.Controllers
@@ -20,13 +17,13 @@ namespace WeatherInTheCity.API.Controllers
 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> AddOrUpdate(UserStatsDTO userStatsDTO)
+        public async Task<IActionResult> AddOrUpdate([FromHeader] string gameFlowId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             if (identity == null) return Unauthorized();
 
             var userId = identity.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
-            await _userStatsService.AddOrUpdate(userStatsDTO, userId!);
+            await _userStatsService.AddOrUpdate(gameFlowId, userId!);
 
             return NoContent();
         }

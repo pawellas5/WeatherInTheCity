@@ -1,11 +1,10 @@
-﻿using WeatherInTheCity.API.Entities;
-using WeatherInTheCity.API.Models;
+﻿using WeatherInTheCity.API.Models;
 
 namespace WeatherInTheCity.API.Services
 {
     public interface IUserStatsService
     {
-        public Task AddOrUpdate(UserStatsDTO userStatsDTO, string userId);
+        public Task AddOrUpdate(string gameFlowId, string userId);
         public Task<UserStatsDTO> GetByUserId(string userId);
 
     }

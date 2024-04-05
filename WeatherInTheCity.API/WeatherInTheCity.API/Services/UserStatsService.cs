@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
-using System.Reflection.Metadata.Ecma335;
 using WeatherInTheCity.API.DbContexts;
-using WeatherInTheCity.API.Entities;
 using WeatherInTheCity.API.Models;
 
 namespace WeatherInTheCity.API.Services
@@ -10,16 +7,32 @@ namespace WeatherInTheCity.API.Services
     public class UserStatsService : IUserStatsService
     {
         private readonly WeatherInTheCityDbContext _context;
-        public UserStatsService(WeatherInTheCityDbContext context)
+        private readonly IGameFlowService _gameFlowService;
+        public UserStatsService(WeatherInTheCityDbContext context, IGameFlowService gameFlowService)
         {
             _context = context;
+            _gameFlowService = gameFlowService;
         }
 
-        public async Task AddOrUpdate(UserStatsDTO userStatsDTO, string userId)
+        public async Task AddOrUpdate(string gameFlowId, string userId)
         {
-            FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Defeats = Defeats + {userStatsDTO.Defeats}, Wins = Wins + {userStatsDTO.Wins}, Games = Games + {userStatsDTO.Games} WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userId},{userStatsDTO.Wins},{userStatsDTO.Defeats},{userStatsDTO.Games});";
-            Console.WriteLine($"myCommand: {myCommand}");
-            await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
+
+            var percentageResult = await _gameFlowService.GetPercentageResult(gameFlowId);
+            if (percentageResult != null)
+            {
+                if (percentageResult >= 50)
+                {
+                    FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Wins = Wins + 1, Games = Games + 1 WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userId},1,0,1);";
+                    await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
+                }
+                else
+                {
+                    FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Defeats = Defeats + 1, Games = Games + 1 WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userId},0,1,1);";
+                    await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
+                }
+            }
+
+
 
         }
         public async Task<UserStatsDTO> GetByUserId(string userId)

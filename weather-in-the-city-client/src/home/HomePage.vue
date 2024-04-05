@@ -13,7 +13,7 @@ import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import getQuestion from '../shared/getQuestion';
 import { useGameInfoStore, useGameDataStore } from '../store/index';
 
-window.addEventListener('beforeunload', () => { useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
+window.addEventListener('beforeunload', async () => { await useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
 
 export default {
   name: 'HomePage',
@@ -32,9 +32,9 @@ export default {
       promise.then(() => { router.push('/game'); });
     };
 
-    onBeforeRouteLeave((to) => {
+    onBeforeRouteLeave(async (to) => {
       if (to.path === '/game' || to.path === '/profile') {
-        if (to.path !== '/game') gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
+        if (to.path !== '/game') await gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
         return canLeave;
       }
       return false;

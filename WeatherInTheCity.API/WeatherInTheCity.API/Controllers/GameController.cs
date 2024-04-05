@@ -21,32 +21,25 @@ namespace WeatherInTheCity.API.Controllers
             _gameFlowService = gameFlowService;
         }
         [HttpGet]
-        //[Authorize]
         public async Task<ActionResult<GameDataDTO>> Get([FromHeader] string? gameFlowId)
         {
 
             var gameData = new GameDataDTO();
-            var cities = await _citiesService.Rand4Cities();
-            var weatherCity = cities.Where(c => c.isCorrect == true).First();
+            var randCities = await _citiesService.Rand4Cities();
+            var weatherCity = randCities[0];
+            var cities = randCities.OrderBy(c => c.CityName.GetHashCode()).ToList();
             var weather = await _openWeatherService.GetWeather($"{weatherCity.CityName.ToLower()},{weatherCity.CountryCode.ToLower()}");
 
             gameData.Weather = weather;
             gameData.Cities = cities;
 
-
-            if (gameData == null)
-            {
-                return NotFound();
-            }
-            var correctCity = gameData.Cities.FirstOrDefault(c => c.isCorrect == true);
-
             if (gameFlowId == null) // null, because it's the first question
             {
-                gameFlowId = await _gameFlowService.CreateGameFlow(correctCity!.CityName);
+                gameFlowId = await _gameFlowService.CreateGameFlow(weatherCity.CityName);
             }
             else
             {
-                gameFlowId = await _gameFlowService.AddQuestion(correctCity!.CityName, gameFlowId!);
+                gameFlowId = await _gameFlowService.AddQuestion(weatherCity.CityName, gameFlowId!);
             }
 
 
@@ -66,7 +59,7 @@ namespace WeatherInTheCity.API.Controllers
 
             if (isCorrect)
             {
-                answerResultDTO.TotalPoints = await _gameFlowService.GivePoint(answer.QuestionNumber, gameFlowId);
+                await _gameFlowService.GivePoint(answer.QuestionNumber, gameFlowId);
             }
 
             answerResultDTO.IsUserCorrect = isCorrect;
@@ -76,6 +69,20 @@ namespace WeatherInTheCity.API.Controllers
 
             return Ok(answerResultDTO);
         }
+
+
+        [HttpGet("result")]
+        public async Task<ActionResult<string>> GetPercentageResult([FromHeader] string gameFlowId)
+        {
+            var result = await _gameFlowService.GetPercentageResult(gameFlowId);
+
+            if (result == null) return BadRequest();
+
+            return Ok(result.ToString()+'%');
+        }
+
+
+
         [HttpDelete("gameflow")]
         public async Task<ActionResult> RemoveGameFlow([FromHeader] string? gameFlowId)
         {

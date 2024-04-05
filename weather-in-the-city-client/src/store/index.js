@@ -7,6 +7,8 @@ export const useGameDataStore = defineStore(
     state: () => ({
       gameData: '',
       guessResult: '',
+      percentageResult: '',
+      userStats: '',
     }),
     getters: {
       weather: (state) => state.gameData.weather,
@@ -47,6 +49,18 @@ export const useGameDataStore = defineStore(
           .catch((error) => { console.log(error); });
       },
 
+      getPercentageResult(gameId) {
+        return axios({
+          method: 'get',
+          url: 'https://localhost:7172/game/result',
+          headers: {
+            gameFlowId: gameId,
+          },
+        })
+          .then((response) => { this.percentageResult = response.data; })
+          .catch((error) => { console.log(error); });
+      },
+
       removeCurrentGame(gameId) {
         return axios.delete('https://localhost:7172/game/gameflow/', {
           headers: {
@@ -55,56 +69,13 @@ export const useGameDataStore = defineStore(
         })
           .catch((error) => console.log(error));
       },
-    },
-  },
-);
-
-export const useGameInfoStore = defineStore(
-  'gameInfo',
-  {
-    state: () => ({
-
-      questionNumber: 1,
-      points: 0,
-      questionTotal: 10,
-
-    }),
-    actions: {
-      addPoint() {
-        this.points += 1;
-      },
-      nextQuestion() {
-        this.questionNumber += 1;
-      },
-      reset() {
-        this.points = 0;
-        this.questionNumber = 1;
-      },
-    },
-
-  },
-
-);
-
-export const useUserStatsStore = defineStore(
-  'userStats',
-  {
-    state: () => ({
-      userStats: '',
-    }),
-
-    actions: {
-      addUserStats(accessToken, _wins, _defeats, _games) {
+      addUserStats(accessToken, gameId) {
         return axios({
           method: 'put',
           url: 'https://localhost:7172/user/stats',
-          data: {
-            wins: _wins,
-            defeats: _defeats,
-            games: _games,
-          },
           headers: {
             Authorization: `Bearer ${accessToken}`,
+            gameFlowId: gameId,
           },
 
         })
@@ -114,7 +85,6 @@ export const useUserStatsStore = defineStore(
       },
 
       getUserStats(accessToken) {
-        console.log(accessToken);
         return axios({
           method: 'get',
           url: 'https://localhost:7172/user/stats',
@@ -129,6 +99,26 @@ export const useUserStatsStore = defineStore(
           .catch((error) => {
             console.log(error);
           });
+      },
+    },
+  },
+);
+
+export const useGameInfoStore = defineStore(
+  'gameInfo',
+  {
+    state: () => ({
+
+      questionNumber: 1,
+      questionTotal: 10,
+
+    }),
+    actions: {
+      nextQuestion() {
+        this.questionNumber += 1;
+      },
+      reset() {
+        this.questionNumber = 1;
       },
     },
 

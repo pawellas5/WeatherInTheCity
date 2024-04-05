@@ -65,39 +65,51 @@ namespace WeatherInTheCity.API.Services
 
             return guid.ToString();
         }
-        
-        /// <param name="questionId"></param>
-        /// <param name="gameFlowId"></param>
-        /// <returns>Total points</returns>
-        public async Task<int?> GivePoint(int questionId, string gameFlowId)
+
+
+        public async Task GivePoint(int questionId, string gameFlowId)
         {
 
             var guid = Guid.Parse(gameFlowId);
             var gameFlow = await _context.GameFlows.Where(r => r.Id == guid).FirstOrDefaultAsync();
 
+            if (gameFlow != null)
+            {
+                gameFlow.LastUpdate = DateTime.Now;
+                var questionList = DeserializeList(gameFlow.Question);
+                var question = questionList.Questions!.Where(q => q.QuestionNumber == questionId).FirstOrDefault();
+
+                if (question != null)
+                {
+
+                    question.UserPoint = true;
+
+                    gameFlow.Question = SerializeList(questionList);
+                    await _context.SaveChangesAsync();
+
+                }
+            }
+
+        }
+
+        public async Task<int?> GetPercentageResult(string gameFlowId)
+        {
+            var guid = Guid.Parse(gameFlowId);
+            var gameFlow = await _context.GameFlows.Where(r => r.Id == guid).FirstOrDefaultAsync();
             if (gameFlow == null) return null;
 
-            gameFlow.LastUpdate = DateTime.Now;
             var questionList = DeserializeList(gameFlow.Question);
-            var question = questionList.Questions!.Where(q => q.QuestionNumber == questionId).FirstOrDefault();
 
-            if (question == null) return questionList.TotalPoints;
-
-            question.UserPoint = true;
-
-            var result = 0;
+            var totalPoints = 0;
             foreach (var q in questionList.Questions)
             {
-                if (q.UserPoint == true) ++result;
+                if (q.UserPoint == true) ++totalPoints;
             }
-            questionList.TotalPoints = result;
 
-            gameFlow.Question = SerializeList(questionList);
-            await _context.SaveChangesAsync();
+            var maxQuestion = questionList.Questions.Max(q => q.QuestionNumber);
+            var result = ((int)(((float)totalPoints / maxQuestion) * 100));
 
-
-            return questionList.TotalPoints;
-
+            return result;
         }
 
 
@@ -135,11 +147,11 @@ namespace WeatherInTheCity.API.Services
 
             var answerResultDTO = new AnswerResultDTO();
             answerResultDTO.CorrectAnswer = correctAnswer;
-            answerResultDTO.TotalPoints = questionList.TotalPoints;
 
             return answerResultDTO;
 
         }
+
 
 
         private string SerializeList(QuestionList questionList)

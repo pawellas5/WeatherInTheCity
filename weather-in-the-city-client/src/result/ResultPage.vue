@@ -1,24 +1,22 @@
 <template>
     <div class="result">
-        Your score is {{ result }}%.
+        Your score is {{ percentageResult }}.
     </div>
 
   </template>
 
 <script>
-import { useGameInfoStore } from '../store/index';
+import { storeToRefs } from 'pinia';
+import { useGameDataStore } from '../store/index';
 
 export default {
   name: 'ResultPage',
 
   setup() {
-    const gameInfoStore = useGameInfoStore();
-    const { points, questionTotal } = gameInfoStore;
-    const result = (points / questionTotal) * 100;
-    gameInfoStore.reset();
-
+    const gameDataStore = useGameDataStore();
+    const { percentageResult } = storeToRefs(gameDataStore);
     return {
-      result,
+      percentageResult,
     };
   },
 

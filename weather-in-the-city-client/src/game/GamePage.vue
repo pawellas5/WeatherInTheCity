@@ -93,15 +93,14 @@ import { storeToRefs } from 'pinia';
 import { useRouter, onBeforeRouteLeave } from 'vue-router';
 import getQuestion from '@/shared/getQuestion';
 import { useAuth0 } from '@auth0/auth0-vue';
-import { computed } from 'vue';
-import { useGameDataStore, useGameInfoStore, useUserStatsStore } from '../store/index';
+import { useGameDataStore, useGameInfoStore } from '../store/index';
 import sleep from './sleep';
 import setWeatherFlags from './weatherIconFlags';
 import {
   isCorrect, isIncorrect, isGreyedOut, setBtnFlags, resetBtnFlags,
 } from './buttonFlags';
 
-window.addEventListener('beforeunload', () => { useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
+window.addEventListener('beforeunload', async () => { await useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
 
 export default {
   name: 'GamePage',
@@ -111,7 +110,6 @@ export default {
     const gameDataStore = useGameDataStore();
     const gameInfoStore = useGameInfoStore();
     const { weather, cities } = storeToRefs(gameDataStore);
-    const { points, questionTotal } = storeToRefs(gameInfoStore);
 
     const {
       isClearSky,
@@ -123,20 +121,16 @@ export default {
       isSnow,
       isStorm,
     } = setWeatherFlags(weather);
-    const userStatsStore = useUserStatsStore();
     const { isAuthenticated } = useAuth0();
 
     const { getAccessTokenSilently } = useAuth0();
 
-    const addUserStats = async (wins, defeats, games) => {
+    const addUserStats = async (gameFlowID) => {
       const accessToken = await getAccessTokenSilently();
-      await userStatsStore.addUserStats(accessToken, wins, defeats, games);
+      await gameDataStore.addUserStats(accessToken, gameFlowID);
     };
 
     async function selectCity(id) {
-    // console.log(`Points: ${gameInfoStore.points}`);
-    // console.log(`QuestionNumber: ${gameInfoStore.questionNumber}`);
-
       const selectedCity = cities.value[id].cityName;
 
       await gameDataStore.postAnswer(
@@ -151,13 +145,11 @@ export default {
         gameInfoStore.nextQuestion();
         await getQuestion(gameDataStore.gameFlowId); // to the next question
       } else {
-        gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
-
+        await gameDataStore.getPercentageResult(gameDataStore.gameFlowId);
         if (isAuthenticated.value) {
-          const result = computed(() => (points.value / questionTotal.value) * 100);
-          if (result.value >= 50) addUserStats(1, 0, 1);// win
-          else addUserStats(0, 1, 1);// defeat
+          await addUserStats(gameDataStore.gameFlowId);
         }
+        await gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
 
         // mark the end of the game and redirect to the result page
         gameInfoStore.questionNumber = gameInfoStore.questionTotal + 1;
@@ -169,7 +161,7 @@ export default {
       resetBtnFlags();
     }
 
-    onBeforeRouteLeave((to) => {
+    onBeforeRouteLeave(async (to) => {
       if (gameInfoStore.questionNumber <= gameInfoStore.questionTotal) {
         if (to.name === 'Result') return false;
         // eslint-disable-next-line no-alert
@@ -178,7 +170,7 @@ export default {
         );
         if (answer) {
           gameInfoStore.reset();
-          gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
+          await gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
           return true;
         }
         return false;

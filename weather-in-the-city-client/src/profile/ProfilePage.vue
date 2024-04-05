@@ -28,7 +28,7 @@
 <script>
 import { useAuth0 } from '@auth0/auth0-vue';
 import { storeToRefs } from 'pinia';
-import { useUserStatsStore } from '../store/index';
+import { useGameDataStore } from '../store/index';
 
 export default {
 
@@ -38,13 +38,13 @@ export default {
     const auth0 = useAuth0();
     const user = auth0 ? auth0.user : null;
 
-    const userStatsStore = useUserStatsStore();
-    const { userStats } = storeToRefs(userStatsStore);
+    const gameDataStore = useGameDataStore();
+    const { userStats } = storeToRefs(gameDataStore);
 
     const { getAccessTokenSilently } = useAuth0();
     const getUserStats = async () => {
       const accessToken = await getAccessTokenSilently();
-      await userStatsStore.getUserStats(accessToken);
+      await gameDataStore.getUserStats(accessToken);
     };
 
     getUserStats();
