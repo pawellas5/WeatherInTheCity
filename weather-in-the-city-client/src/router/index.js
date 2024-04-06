@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
 // import { authGuard } from '@auth0/auth0-vue';
 import HomePage from '../home/HomePage.vue';
+import StartPage from '../home/StartPage.vue';
 import GamePage from '../game/GamePage.vue';
 import ResultPage from '../result/ResultPage.vue';
 import CallbackPage from '../authentication/callback/CallbackPage.vue';
@@ -8,6 +9,12 @@ import ProfilePage from '../profile/ProfilePage.vue';
 
 export default createRouter({
   routes: [
+    {
+      name: 'Start',
+      path: '/start',
+      component: StartPage,
+    },
+
     {
       name: 'Home',
       path: '/',
@@ -29,7 +36,7 @@ export default createRouter({
       path: '/result',
       component: ResultPage,
       beforeEnter: (to, from) => {
-        if (from.name === 'Home' || from.name === undefined) return { name: 'Home' };
+        if (from.name !== 'Game' || from.name === undefined) return { name: 'Home' };
         return true;
       },
 

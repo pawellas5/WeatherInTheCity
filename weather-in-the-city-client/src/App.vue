@@ -2,7 +2,8 @@
   <nav>
     <ul>
       <li class="logo">
-        <router-link class="link" to="/">WeatherInTheCity</router-link>
+        <router-link v-if="!isAuthenticated" class="link" to="/">WeatherInTheCity</router-link>
+        <router-link v-if="isAuthenticated" class="link" to="/start">WeatherInTheCity</router-link>
         <img  src="./assets/weather_logo.png" alt="logo">
       </li>
       <li class="space">
@@ -25,12 +26,21 @@
 </template>
 
 <script>
+import { useAuth0 } from '@auth0/auth0-vue';
 import NavbarButtons from './authentication/buttons/NavbarButtons.vue';
 
 export default {
   name: 'App',
   components: {
     NavbarButtons,
+  },
+
+  setup() {
+    const { isAuthenticated } = useAuth0();
+
+    return {
+      isAuthenticated,
+    };
   },
 
 };

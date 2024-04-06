@@ -100,8 +100,6 @@ import {
   isCorrect, isIncorrect, isGreyedOut, setBtnFlags, resetBtnFlags,
 } from './buttonFlags';
 
-window.addEventListener('beforeunload', async () => { await useGameDataStore().removeCurrentGame(useGameDataStore().gameFlowId); });
-
 export default {
   name: 'GamePage',
 
@@ -155,7 +153,6 @@ export default {
         gameInfoStore.questionNumber = gameInfoStore.questionTotal + 1;
         router.push({
           name: 'Result',
-
         });
       }
       resetBtnFlags();
