@@ -19,9 +19,15 @@
     <router-view></router-view>
   </div>
   <footer>
-    <a href="https://www.iconfinder.com/">
+    <div class="space"></div>
+    <div class="footerItems">
+      <div class="footerItem">Copyright 2024 WeatherInTheCity PB</div>
+    <div class="footerItem"><a href="https://www.iconfinder.com/">
       https://www.iconfinder.com/
-    </a>
+    </a></div>
+    </div>
+    <div class="space"></div>
+
   </footer>
 </template>
 
@@ -58,7 +64,7 @@ export default {
 
 }
 .space{
-  flex-grow: 1;
+  flex-grow: 0;
 }
 
 .logo{
@@ -90,8 +96,34 @@ nav ul{
 nav ul li{
   list-style: none;
 }
+
+.space{
+  flex-grow:1;
+}
+
+.footerItems{
+
+  font-size: 1rem;
+  display: flex;
+  flex-direction: column;
+  color:white;
+  width:100%;
+  height:70%;
+}
+
+.footerItem{
+height:50%;
+display:flex;
+align-items: center;
+justify-content: center;
+font-size:1.2rem;
+color:rgba(255, 255, 255,0.100);
+
+}
+
 footer{
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
   height:5rem;
@@ -101,14 +133,11 @@ footer a{
 
   color:rgba(255, 255, 255,0.100);
   text-decoration:none;
-  padding:1.5rem 0 1rem 0;
-  font-size: 1.5rem;
+  /* padding:1.5rem 0 1rem 0; */
+  /* font-size: 1rem; */
 
 }
-footer a:hover{
-  color:white;
 
-}
 .content{
   color: #2c3e50;
   display:flex;

@@ -102,4 +102,28 @@ export default {
     background-color:#ff9300;
   }
 
+  @media screen and (max-width: 1920px ){
+
+    .homeBtns{
+      height:35%;
+    }
+
+}
+
+@media screen and (max-width: 1366px ){
+
+.homeBtns{
+  height:45%;
+}
+
+}
+
+@media screen and (max-width: 1280px ){
+
+.homeBtns{
+  height:50%;
+}
+
+}
+
     </style>

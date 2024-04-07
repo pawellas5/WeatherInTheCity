@@ -72,13 +72,13 @@ namespace WeatherInTheCity.API.Controllers
 
 
         [HttpGet("result")]
-        public async Task<ActionResult<string>> GetPercentageResult([FromHeader] string gameFlowId)
+        public async Task<ActionResult<int>> GetPercentageResult([FromHeader] string gameFlowId)
         {
             var result = await _gameFlowService.GetPercentageResult(gameFlowId);
 
             if (result == null) return BadRequest();
 
-            return Ok(result.ToString()+'%');
+            return Ok(result);
         }
 
 
