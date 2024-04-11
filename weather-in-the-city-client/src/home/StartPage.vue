@@ -1,5 +1,18 @@
 <template>
   <div class="startGame">
+    <div class="loading">
+      <img src="../assets/weather_desc/clear_sky_2.png" alt="weather">
+      <img src="../assets/weather_desc/drizzle_2.png" alt="weather">
+      <img src="../assets/weather_desc/mist_fog_2.png" alt="weather">
+      <img src="../assets/weather_desc/overcast_clouds_2.png" alt="weather">
+      <img src="../assets/weather_desc/rain_2.png" alt="weather" >
+      <img src="../assets/weather_desc/scattered_clouds_2.png" alt="weather">
+      <img src="../assets/weather_desc/snow_2.png" alt="weather">
+      <img src="../assets/weather_desc/thunderstorm_2.png" alt="weather">
+      <img src="../assets/weather_desc/scattered_clouds_2.png" alt="weather">
+      <img src="../assets/positiveResult.png" alt="positive" >
+      <img src="../assets/negativeResult.png" alt="negative" >
+    </div>
     <button @click="startGame">
     Start Game
   </button>
@@ -51,6 +64,10 @@ export default {
 
 <style scoped>
 
+.loading{
+  display: none;
+}
+
 .startGame{
 
   width:100%;
@@ -74,5 +91,35 @@ export default {
   cursor:pointer;
   background-color:#ff9300;
 
+}
+
+@media screen and (max-width: 430px ){
+
+  .startGame button{
+    height:90px;
+    font-size: 1.9rem;
+  }
+}
+@media screen and (max-width:390px){
+  .startGame button{
+    width:200px;
+    height:65px;
+    font-size: 1.6rem;
+  }
+}
+
+@media screen and (max-width:360px){
+  .startGame button{
+    height:70px;
+    font-size: 1.8rem;
+  }
+}
+
+@media screen and (max-width:280px){
+  .startGame button{
+    width:180px;
+    height:65px;
+    font-size: 1.5rem;
+  }
 }
   </style>

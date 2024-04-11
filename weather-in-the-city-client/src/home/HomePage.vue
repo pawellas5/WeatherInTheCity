@@ -110,7 +110,7 @@ export default {
 
 }
 
-@media screen and (max-width: 1366px ){
+@media screen and (max-width: 1366px )and (orientation:landscape){
 
 .homeBtns{
   height:45%;
@@ -118,12 +118,109 @@ export default {
 
 }
 
-@media screen and (max-width: 1280px ){
+@media screen and (max-width: 1280px )and (orientation:landscape){
 
 .homeBtns{
   height:50%;
 }
 
 }
+@media screen and (max-width: 1024px ){
 
-    </style>
+  .homeBtns{
+    height:25%;
+  }
+
+}
+
+@media screen and (max-width: 1024px ) and (orientation:landscape){
+  .homeBtns{
+    height:60%;
+  }
+}
+
+@media screen and (max-width: 853px ){
+
+  .homeBtns{
+    height:28%;
+  }
+
+}
+
+@media screen and (max-width: 768px ){
+
+  .homeBtns{
+    height:35%;
+  }
+
+}
+
+@media screen and (max-width: 800px ) and (orientation:landscape){
+
+  .homeBtns{
+    height:70%;
+  }
+
+}
+
+@media screen and (max-width: 540px ){
+
+  .homeBtns{
+    height:55%;
+  }
+
+}
+
+@media screen and (max-width: 430px ){
+
+  .homeBtns{
+    height:35%;
+  }
+
+  .homeBtn{
+    height:90px;
+    font-size: 1.9rem;
+  }
+
+}
+@media screen and (max-width:390px){
+
+  .homeBtn{
+    width:200px;
+    height:70px;
+    font-size: 1.8rem;
+  }
+  .homeBtns{
+    height:30%;
+  }
+}
+
+@media screen and (max-width:375px){
+
+  .homeBtns{
+    height:45%;
+  }
+}
+
+@media screen and (max-width:360px){
+  .homeBtns{
+    height:35%;
+  }
+  .homeBtn{
+    font-size: 1.6rem;
+  }
+}
+
+@media screen and (max-width:280px){
+  .homeBtns{
+    height:42%;
+  }
+
+  .homeBtn{
+    width:180px;
+    height:65px;
+    font-size: 1.5rem;
+  }
+}
+
+</style>

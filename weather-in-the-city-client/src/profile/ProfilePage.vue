@@ -4,7 +4,7 @@
         <div class="userDetails">
             <div class="detailsRow">
                 <div class="rowTitle">User:</div>
-                <div class="rowValue">{{ user.name }}</div>
+                <div class="rowValue">{{ user.nickname }}</div>
             </div>
             <div class="detailsRow">
                 <div class="rowTitle">Wins:</div>
@@ -112,4 +112,31 @@ export default {
         font-style: italic;
     }
 
+ @media screen and (max-width:540px){
+
+.userDetails{
+    width:80%;
+    height:80%;
+    font-size:1.8rem;
+    border:4px solid #1d1f20;
+  }
+
+  .detailsRow{
+    width:90%;
+    border-bottom:4px solid #1d1f20;
+
+  }
+}
+
+@media screen and (max-width:280px){
+
+  .userDetails{
+    width:85%;
+    height:70%;
+    font-size:1.5rem;
+  }
+  .detailsRow{
+    width:80%;
+  }
+}
     </style>

@@ -1,32 +1,38 @@
+<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
 <template>
   <nav>
-    <ul>
-      <li class="logo">
-        <router-link v-if="!isAuthenticated" class="link" to="/">WeatherInTheCity</router-link>
-        <router-link v-if="isAuthenticated" class="link" to="/start">WeatherInTheCity</router-link>
-        <img  src="./assets/weather_logo.png" alt="logo">
-      </li>
-      <li class="space">
+    <div class="navDiv">
+        <button class = "homeButton">
+        <router-link v-if="!isAuthenticated" class=" logo link" to="/">
+          <img class="logoImage" src="./assets/rainbow_logo.png" alt="logo">
+          <span class="pageTitle">WeatherInTheCity</span>
+        </router-link>
+        <router-link v-if="isAuthenticated" class=" logo link" to="/start">
+          <img class="logoImage" src="./assets/rainbow_logo.png" alt="logo">
+          <span class="pageTitle">WeatherInTheCity</span></router-link>
+        </button>
+      <div class="space"></div>
+      <div class="navBtns">
+          <!-- signup, login, logout -->
+          <NavbarButtons/>
 
-      </li>
-      <li class="navBtns">
-        <!-- signup, login, logout -->
-        <NavbarButtons/>
-      </li>
-    </ul>
+      </div>
+
+    </div>
   </nav>
   <div class="content">
     <router-view></router-view>
   </div>
   <footer>
-    <div class="space"></div>
+    <div class="footerRowSpace"></div>
     <div class="footerItems">
       <div class="footerItem">Copyright 2024 WeatherInTheCity PB</div>
+      <div class="footerColSpace"></div>
     <div class="footerItem"><a href="https://www.iconfinder.com/">
       https://www.iconfinder.com/
     </a></div>
     </div>
-    <div class="space"></div>
+    <div class="footerRowSpace"></div>
 
   </footer>
 </template>
@@ -34,6 +40,8 @@
 <script>
 import { useAuth0 } from '@auth0/auth0-vue';
 import NavbarButtons from './authentication/buttons/NavbarButtons.vue';
+import LoginButton from './authentication/buttons/LoginButton.vue';
+import SignupButton from './authentication/buttons/SignupButon.vue';
 
 export default {
   name: 'App',
@@ -46,6 +54,8 @@ export default {
 
     return {
       isAuthenticated,
+      LoginButton,
+      SignupButton,
     };
   },
 
@@ -59,42 +69,67 @@ export default {
   padding:0;
   box-sizing: border-box;
 }
-.navBtns{
-  width:300px;
+.homeButton{
+  border-radius: 1rem;
+  color:inherit;
+  background-color: #1d1f20;
+  border:none;
+  /* border-color:rgba(255, 0, 0, 0.247); */
+  /* font-size:1.5rem; */
+  padding:0.5rem 0 0.5rem 0;
+  font-size:inherit;
 
 }
-.space{
-  flex-grow: 0;
+
+.logoImage{
+  width:15%;
+}
+
+.navBtns{
+  width:300px;
+  height: 100%;
+
+}
+.footerRowSpace{
+  flex-grow:1;
+}
+.footerColSpace{
+  flex-grow:1
 }
 
 .logo{
   display:flex;
   width:300px;
-
+  height:100%;
+  gap:0.5rem;
 }
-.logo .link{
+.link{
   text-decoration: none;
   color:inherit;
+  display:flex;
+  justify-content: center;
+  align-items: center;
 }
 
 nav{
-
-  height:5rem;
+  display:flex;
+  /* height:5rem; */
   background-color: rgb(53, 55, 59);
   color:white;
   font-size: 2rem;
+  width:100%;
+  height:104px;
 
 }
-nav ul{
+.navDiv{
   display:flex;
   height:100%;
   padding:1rem 20rem 1rem 20rem;
   justify-content: left;
-  gap: 5rem;
+  /* gap: 5rem; */
+  width:100%;
+  font-size:1.5rem;
 
-}
-nav ul li{
-  list-style: none;
 }
 
 .space{
@@ -103,7 +138,6 @@ nav ul li{
 
 .footerItems{
 
-  font-size: 1rem;
   display: flex;
   flex-direction: column;
   color:white;
@@ -167,92 +201,180 @@ footer a{
 }
 
 @media screen and (max-width: 1920px ){
-   .content{
+  .content{
     padding: 0rem 18rem 0rem 18rem;
-   }
-   nav ul{
+  }
+  nav .navDiv{
 
     padding:1rem 18rem 1rem 18rem;
 
-   }
   }
+}
 
 @media screen and (max-width: 1536px ){
   .content{
-  padding: 0rem 10rem 0rem 10rem;
+    padding: 0rem 10rem 0rem 10rem;
   }
-  nav ul{
-
-  padding:1rem 10rem 1rem 10rem;
-
+  nav .navDiv{
+    padding:1rem 10rem 1rem 10rem;
   }
 }
-
 @media screen and (max-width: 1366px ){
-   .content{
+  .content{
     padding: 0rem 5rem 0rem 5rem;
-   }
-   nav ul{
-
+  }
+  nav .navDiv{
     padding:1rem 5rem 1rem 5rem;
-
-   }
+  }
 }
 
 @media screen and (max-width: 1024px ){
-   .content{
+  .content{
     padding: 0rem 0rem 0rem 0rem;
-   }
-   nav ul{
-
+  }
+  nav .navDiv{
     padding:1rem 0rem 1rem 0rem;
     justify-content:center;
-
-   }
+  }
 }
 
 @media screen and (max-width: 1024px ) and (orientation:landscape){
   footer a{
     font-size: 1.2rem;
-   }
+  }
+  .navDiv{
+    gap:0;
+  }
+  .homeButton{
+    margin-left: 24px;
+  }
 }
 
 @media screen and (max-width: 932px ) and (orientation: landscape){
   nav{
-    height: 3rem;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
   }
-  nav ul{
-    padding:0.3rem 25rem 0.3rem 25rem;
+  nav .navDiv{
+    padding:0.3rem 4rem 0.3rem 4rem;
   }
-  footer{
-    height: 3rem;
+  .navDiv{
+    height:85%;
   }
   footer a{
     font-size: 0.8rem;
     padding:1rem 0 1rem 0;
-
-   }
+  }
 }
 
 @media screen and (max-width: 740px ) and (orientation: landscape){
+
+  .navDiv{
+    font-size:1.3rem;
+  }
+
+  .pageTitle{
+    display:none;
+  }
+
+  .logo{
+    width:80px;
+  }
+
+  .navBtns{
+    width:200px;
+  }
+
+  .logoImage{
+    width:55px;
+  }
+
+  .homeButton{
+    border-radius: 1rem;
+    color:inherit;
+    background-color: #1d1f20;
+    border:none;
+    padding:1rem 0 1rem 0;
+    font-size:inherit;
+  }
+
+  .footerColSpace{
+    flex-grow:0;
+  }
+
+  .footerRowSpace{
+    flex-grow:0;
+  }
+
+  .footerItem{
+    height:100%;
+    font-size:1rem;
+    width:50%;
+  }
+
   footer a{
-    font-size: 0.6rem;
-   }
+    font-size: 1rem;
+  }
+
+  .footerItems{
+  flex-direction: row;
+  }
+
 }
 
+@media screen and (max-width: 1024px ){
+  .homeButton{
+    margin-left: 35px;
+  }
+}
+@media screen and (max-width: 768px ){
+  .navBtns{
+    margin-right:35px;
+  }
+}
 @media screen and (max-width: 540px ){
-   .content{
+  .content{
     padding: 0rem 0rem 0rem 0rem;
-   }
-   nav ul{
+  }
 
-    padding:1rem 0rem 1rem 0rem;
-    justify-content:center;
-
-   }
-   footer a{
+  footer a{
     font-size: 1.2rem;
-   }
+  }
+
+  .space{
+    flex-grow:1;
+  }
+
+  .navDiv{
+    font-size: 1.3rem;
+    padding:1rem 0rem 1rem 0rem;
+    gap:0;
+  }
+
+  .pageTitle{
+    display:none;
+  }
+
+  .logo{
+    width:80px;
+  }
+  .navBtns{
+    width:200px;
+  }
+  .logoImage{
+    width:55px;
+  }
+
+  .homeButton{
+    border-radius: 1rem;
+    color:inherit;
+    background-color: #1d1f20;
+    border:none;
+    padding:1rem 0 1rem 0;
+    font-size:inherit;
+    margin-left: 24px;
+  }
 }
 
 @media screen and (max-width: 375px ){
@@ -261,16 +383,35 @@ footer a{
    }
 }
 
-@media screen and (max-width: 280px ){
-   nav ul{
+@media screen and (max-width: 320px ){
+   nav .navDiv{
     padding: 1.5rem;
     font-size: 1.5rem;
    }
-   nav ul li img{
+   nav .navDiv .logo img{
     width:40px;
     height:40px;
    }
-   footer a{
+
+   .footerItem{
+    font-size: 1rem;
+   }
+
+   .footerItem a{
+    font-size: 0.8rem;
+   }
+   .homeButton{
+    margin-left:0;
+   }
+   .navBtns{
+    width:80px;
+    margin-right:0px;
+   }
+
+}
+
+@media screen and (max-width: 320px ){
+   .footerItem{
     font-size: 0.9rem;
    }
 }

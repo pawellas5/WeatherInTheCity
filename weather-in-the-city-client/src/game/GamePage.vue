@@ -24,6 +24,7 @@
           <img src="../assets/weather_desc/scattered_clouds_2.png" alt="weather"></div>
 
       </div>
+
       <div class="otherInfo">
         <div>Description: {{ weather.weather[0].description }}</div>
         <div>Pressure: {{ weather.main.pressure }} kpa</div>
@@ -202,6 +203,7 @@ export default {
 </script>
 
 <style scoped>
+
 .degreeCelsius{
   width:70%;
   display:flex;
@@ -322,38 +324,74 @@ align-items: center;
   padding-top:4rem;
 }
 
-@media screen and (max-width: 1024px ){
+@media screen and (max-width: 1280px ){
+  .degreeCelsius{
+    font-size:8rem;
+  }
+}
+
+@media screen and (max-width: 1080px ){
   .main{
     padding-top:2rem;
   }
-
-  .btn{
-  width:500px;
-  height:70px;
-}
-  .cities{
-flex-direction: column;
-}
 .weather{
   border-radius: 0;
 }
+
+.degreeCelsius{
+    font-size:6rem;
+  }
+
+  .cities{
+  display:grid;
+  grid-template-columns: 50% 50% ;
+  grid-template-rows: 50% 50% ;
+  justify-items: center;
+  padding: 2.5rem 3rem 2.5rem 3rem;
+
+}
+.main .cities .btn{
+
+  height:200px;
+  width:350px;
+  border-radius: 1.5rem;
+  padding: 3.5rem 0 3.5rem 0;
+}
+
+}
+
+@media screen and (max-width: 1024px ){
+
+ .main .cities .btn{
+
+height:150px;
+width:300px;
+padding: 3.5rem 0 3.5rem 0;
+}
+
 }
 
 @media screen and (max-width: 1024px ) and (orientation: landscape){
 
-  .btn{
+ .main .cities .btn{
   width:200px;
   height:80px;
   font-size: 1.5rem;
+  padding:0;
 }
   .cities{
+    display:flex;
 flex-direction: row;
+padding:0;
 }
 .otherInfo div{
   font-size: 1.5rem;
 }
 .temperature{
   font-size: 8rem ;
+}
+.cityName{
+  padding-top:0.5rem;
 }
 
 }
@@ -389,6 +427,34 @@ height:100%;
 height:100%;
 font-size:1.5rem;
 }
+.temperature{
+    flex-direction:column-reverse;
+  }
+.icon{
+  width:100%;
+  height:50%;
+  display:flex;
+  justify-content: center;
+}
+.icon img{
+  width:270px;
+  height:270px;
+}
+.degreeCelsius{
+  width:100%;
+  height:50%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  font-size:8rem;
+
+}
+.otherInfo{
+  align-items: center;
+}
+.otherInfo div{
+  width:70%;
+}
 
 }
 
@@ -396,12 +462,32 @@ font-size:1.5rem;
 .temperature{
 font-size:8rem;
 }
-.cities .btn{
-padding:0.5rem 0 0.5rem 0;
-height:75px;
-}
 .countryName{
 font-size:1.5rem;
+}
+
+.icon img{
+  width:220px;
+  height:220px;
+}
+
+.degreeCelsius{
+  font-size:6rem;
+
+}
+
+.otherInfo div{
+  width:80%;
+}
+
+.main .cities .btn{
+
+height:100px;
+width:300px;
+padding: 1rem 0 1rem 0;
+}
+.cities{
+padding: 2.5rem 3rem 2.5rem 3rem;
 }
 
 }
@@ -423,11 +509,6 @@ font-size: 3rem ;
 
 @media screen and (max-width: 540px ){
 
-.cities .btn{
-  width:220px;
-  height:50px;
-  font-size: 1.2rem;
-}
   .main{
     padding-top:2rem;
     font-size: 1.2rem;
@@ -438,29 +519,63 @@ font-size: 3rem ;
 .countryName{
   font-size: 1rem;
 }
-  .cities{
-flex-direction: column;
+.degreeCelsius{
+  font-size:4rem;
+
+}
+.icon img{
+  width:160px;
+  height:160px;
+}
+.otherInfo div{
+  width:80%;
+}
+
+.main .cities .btn{
+
+height:80px;
+width:200px;
+border-radius: 1.5rem;
+padding: 1rem 0 1rem 0;
+font-size:1.2rem;
+}
+.cities{
+padding: 1rem 0 1rem 0;
+}
+
+}
+
+@media screen and (max-width: 430px ){
+
+.main .cities .btn{
+
+  height:90px;
+  width:160px;
+  padding: 1rem 0 1rem 0;
+  font-size:1.2rem;
+
 }
 
 }
 
 @media screen and (max-width: 375px ){
-  .main{
-    padding-top:2rem;
-    font-size: 1.1rem;
-  }
-  .temperature{
-    font-size: 4rem;
-  }
 
-.cities .btn{
-  padding:0.5rem 0 0.5rem 0;
-  height:45px;
-  width:200px;
+.main .cities .btn{
+
+  height:70px;
+  width:160px;
+  padding: 1rem 0 1rem 0;
+  font-size:1.2rem;
 }
-
-.countryName{
-font-size:0.9rem;
+.cities{
+  padding: 1rem 0.2rem 1rem 0.2rem;
+}
+.degreeCelsius{
+  font-size:3.5rem;
+}
+.icon img{
+  width:110px;
+  height:110px;
 }
 
 }
@@ -473,16 +588,36 @@ font-size:0.9rem;
     font-size: 3.5rem;
   }
 
-.cities .btn{
-  width:220px;
-  height:40px;
-}
 .countryName{
   font-size: 0.8rem;
 }
 .cityName{
   font-size:0.9rem;
 }
+.icon img{
+  width:110px;
+  height:110px;
+}
+.degreeCelsius{
+
+  font-size:2.5rem;
+
+}
+.otherInfo{
+  padding-right: 0.4rem;
+}
+
+.main .cities .btn{
+
+  width:120px;
+  height:60px;
+  font-size: 2rem;
+  padding: 1.2rem 0 1.2rem 0;
+}
+.cities{
+  padding: 1.5rem 0 1.5rem 0;
+}
+
 }
 
 </style>
