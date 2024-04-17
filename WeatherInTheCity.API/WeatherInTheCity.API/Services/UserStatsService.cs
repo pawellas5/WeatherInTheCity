@@ -22,12 +22,12 @@ namespace WeatherInTheCity.API.Services
             {
                 if (percentageResult >= 50)
                 {
-                    FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Wins = Wins + 1, Games = Games + 1 WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userId},1,0,1);";
+                    FormattableString myCommand = $"MERGE INTO \"UserStats\" as Target using (VALUES({userId})) as Source(\"UserId\") ON \"target\".\"UserId\" = \"source\".\"UserId\" WHEN MATCHED THEN  UPDATE SET \"Wins\" = \"target\".\"Wins\" + 1, \"Games\" = \"target\".\"Games\" + 1 WHEN NOT MATCHED THEN INSERT (\"UserId\", \"Wins\", \"Defeats\", \"Games\") VALUES ({userId}, 1, 0, 1);";
                     await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
                 }
                 else
                 {
-                    FormattableString myCommand = $"MERGE INTO dbo.UserStats AS Target USING (VALUES ({userId})) AS Source (UserId) ON Target.UserId = Source.UserId WHEN MATCHED THEN UPDATE SET Defeats = Defeats + 1, Games = Games + 1 WHEN NOT MATCHED THEN INSERT(UserId,Wins,Defeats,Games) VALUES ({userId},0,1,1);";
+                    FormattableString myCommand = $"MERGE INTO \"UserStats\" as Target using (VALUES({userId})) as Source(\"UserId\") ON \"target\".\"UserId\" = \"source\".\"UserId\" WHEN MATCHED THEN  UPDATE SET \"Defeats\" = \"target\".\"Defeats\" + 1, \"Games\" = \"target\".\"Games\" + 1 WHEN NOT MATCHED THEN INSERT (\"UserId\", \"Wins\", \"Defeats\", \"Games\") VALUES ({userId}, 0, 1, 1);";
                     await _context.Database.ExecuteSqlInterpolatedAsync(myCommand);
                 }
             }

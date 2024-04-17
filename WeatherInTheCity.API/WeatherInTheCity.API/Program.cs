@@ -43,7 +43,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(
         c =>
         {
-             c.SwaggerDoc("v1", new OpenApiInfo { Title = "WeatherInTheCity.API", Version = "v1.0.0" });
+            c.SwaggerDoc("v1", new OpenApiInfo { Title = "WeatherInTheCity.API", Version = "v1.0.0" });
 
 
             var securitySchema = new OpenApiSecurityScheme
@@ -82,7 +82,7 @@ builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
     .AddPolicyHandler(timeoutPolicy);
 
 builder.Services.AddDbContext<WeatherInTheCityDbContext>(o =>
-    o.UseSqlServer(builder.Configuration["ConnectionStrings:DefaultConnection"]));
+   o.UseNpgsql(builder.Configuration["ConnectionStrings:DefaultConnection"]));
 
 builder.Services.AddCors(options =>
 {

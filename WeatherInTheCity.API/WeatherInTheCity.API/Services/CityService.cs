@@ -22,10 +22,11 @@ namespace WeatherInTheCity.API.Services
         {
             var randIndices = new List<int>();
             var possibleCitiesInit = new List<CityDTO>();
+            var citiesCount = await CountCities();
 
             do
             {
-                var index = new Random().Next(1,await CountCities()+1);
+                var index = new Random().Next(1, citiesCount + 1);
                 if (randIndices.Any(c => c == index)) continue;
                 randIndices.Add(index);
             } while (randIndices.Count < 4);
@@ -43,7 +44,7 @@ namespace WeatherInTheCity.API.Services
         {
              int n = 0;
             var cities = await _context.Cities
-                    .FromSql($"SELECT * FROM dbo.Cities WHERE Id IN({indices[n++]},{indices[n++]},{indices[n++]},{indices[n++]});")
+                    .FromSql($"SELECT * FROM \"Cities\" WHERE \"Id\" IN({indices[n++]},{indices[n++]},{indices[n++]},{indices[n++]});")
                     .ToListAsync();
 
             if (cities != null) return cities;

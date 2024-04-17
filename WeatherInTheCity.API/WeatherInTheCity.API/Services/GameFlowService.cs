@@ -31,7 +31,7 @@ namespace WeatherInTheCity.API.Services
             var gameFlow = new GameFlow();
             gameFlow.Id = guid;
             gameFlow.Question = SerializeList(questionList);
-            gameFlow.LastUpdate = DateTime.Now;
+            gameFlow.LastUpdate = DateTime.UtcNow;
 
 
             await _context.GameFlows.AddAsync(gameFlow);
@@ -48,7 +48,7 @@ namespace WeatherInTheCity.API.Services
 
             if (gameFlow == null) return null!;
 
-            gameFlow.LastUpdate = DateTime.Now;
+            gameFlow.LastUpdate = DateTime.UtcNow;
             var questionList = DeserializeList(gameFlow.Question);
             var lastQuestionNumber = 0;
 
@@ -75,7 +75,7 @@ namespace WeatherInTheCity.API.Services
 
             if (gameFlow != null)
             {
-                gameFlow.LastUpdate = DateTime.Now;
+                gameFlow.LastUpdate = DateTime.UtcNow;
                 var questionList = DeserializeList(gameFlow.Question);
                 var question = questionList.Questions!.Where(q => q.QuestionNumber == questionId).FirstOrDefault();
 
