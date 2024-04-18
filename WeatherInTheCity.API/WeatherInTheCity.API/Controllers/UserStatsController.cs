@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Security.Claims;
 using WeatherInTheCity.API.Services;
 
@@ -17,6 +18,8 @@ namespace WeatherInTheCity.API.Controllers
 
         [HttpPut]
         [Authorize]
+        [DisableRateLimiting]
+
         public async Task<IActionResult> AddOrUpdate([FromHeader] string gameFlowId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
@@ -27,9 +30,9 @@ namespace WeatherInTheCity.API.Controllers
 
             return NoContent();
         }
-
         [HttpGet]
         [Authorize]
+        [DisableRateLimiting]
         public async Task<IActionResult> Get()
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;

@@ -82,7 +82,7 @@ builder.Services.AddHttpClient<IOpenWeatherService, OpenWeatherService>()
     .AddPolicyHandler(timeoutPolicy);
 
 builder.Services.AddDbContext<WeatherInTheCityDbContext>(o =>
-   o.UseNpgsql(builder.Configuration["ConnectionStrings:DefaultConnection"]));
+   o.UseNpgsql(builder.Configuration["ConnectionStrings:WeatherInTheCityDB"]));
 
 builder.Services.AddCors(options =>
 {
@@ -143,43 +143,21 @@ builder.Services.AddRateLimiter(_ =>
             {
 
                 return RateLimitPartition.GetFixedWindowLimiter
-            (remoteIpAddress!, _ =>
-                new FixedWindowRateLimiterOptions
-                {
-                    AutoReplenishment = true,
-                    PermitLimit = 5,
-                    Window = TimeSpan.FromSeconds(10),
-                    QueueLimit = 2,
-                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+        (remoteIpAddress!, _ =>
+            new FixedWindowRateLimiterOptions
+            {
+                AutoReplenishment = true,
+                PermitLimit = 10,
+                Window = TimeSpan.FromSeconds(17),
+                QueueLimit = 1,
 
-                });
+            });
             }
 
             return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
 
 
         }),
-
-         PartitionedRateLimiter.Create<HttpContext, IPAddress>(httpContext =>
-         {
-             IPAddress? remoteIpAddress = httpContext.Connection.RemoteIpAddress;
-             if (!IPAddress.IsLoopback(remoteIpAddress!))
-             {
-
-                 return RateLimitPartition.GetFixedWindowLimiter
-             (remoteIpAddress!, _ =>
-                 new FixedWindowRateLimiterOptions
-                 {
-                     AutoReplenishment = true,
-                     PermitLimit = 16,
-                     Window = TimeSpan.FromMinutes(1),
-
-
-                 });
-             }
-             return RateLimitPartition.GetNoLimiter(IPAddress.Loopback);
-
-         }),
 
         PartitionedRateLimiter.Create<HttpContext, IPAddress>(httpContext =>
         {
@@ -192,8 +170,9 @@ builder.Services.AddRateLimiter(_ =>
                 new FixedWindowRateLimiterOptions
                 {
                     AutoReplenishment = true,
-                    PermitLimit = 80,
+                    PermitLimit = 250,
                     Window = TimeSpan.FromDays(1),
+                    QueueLimit = 1,
 
                 });
             }

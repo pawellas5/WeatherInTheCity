@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using WeatherInTheCity.API.Models;
 using WeatherInTheCity.API.Services;
 
@@ -20,6 +21,7 @@ namespace WeatherInTheCity.API.Controllers
             _citiesService = citiesService;
             _gameFlowService = gameFlowService;
         }
+
         [HttpGet]
         public async Task<ActionResult<GameDataDTO>> Get([FromHeader] string? gameFlowId)
         {
@@ -49,11 +51,14 @@ namespace WeatherInTheCity.API.Controllers
 
         }
 
+        [DisableRateLimiting]
         [HttpPost("check")]
         public async Task<ActionResult<AnswerResultDTO>> CheckAnswer(AnswerDTO answer, [FromHeader] string gameFlowId)
         {
 
             var answerResultDTO = await _gameFlowService.GetCorrectAnswer(gameFlowId, answer.QuestionNumber);
+
+            if (answerResultDTO == null) return BadRequest();
 
             var isCorrect = (answer.City.ToLower() == answerResultDTO.CorrectAnswer.ToLower()) && (answer.City != string.Empty); //check the answer
 
@@ -70,7 +75,7 @@ namespace WeatherInTheCity.API.Controllers
             return Ok(answerResultDTO);
         }
 
-
+        [DisableRateLimiting]
         [HttpGet("result")]
         public async Task<ActionResult<int>> GetPercentageResult([FromHeader] string gameFlowId)
         {
@@ -82,7 +87,7 @@ namespace WeatherInTheCity.API.Controllers
         }
 
 
-
+        [DisableRateLimiting]
         [HttpDelete("gameflow")]
         public async Task<ActionResult> RemoveGameFlow([FromHeader] string? gameFlowId)
         {
