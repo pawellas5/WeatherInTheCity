@@ -23,7 +23,7 @@ export const useGameDataStore = defineStore(
     actions:
     {
       getGameData(gameId = null) {
-        return axios.get('https://localhost:7172/game/', {
+        return axios.get(`${process.env.VUE_APP_API_URL}/game/`, {
           headers: {
             gameFlowId: gameId,
           },
@@ -35,7 +35,7 @@ export const useGameDataStore = defineStore(
       postAnswer(questionNumber, city, gameId) {
         return axios({
           method: 'post',
-          url: 'https://localhost:7172/game/check',
+          url: `${process.env.VUE_APP_API_URL}/game/check`,
           data: {
             QuestionNumber: questionNumber,
             City: city,
@@ -52,7 +52,7 @@ export const useGameDataStore = defineStore(
       getPercentageResult(gameId) {
         return axios({
           method: 'get',
-          url: 'https://localhost:7172/game/result',
+          url: `${process.env.VUE_APP_API_URL}/game/result`,
           headers: {
             gameFlowId: gameId,
           },
@@ -62,7 +62,7 @@ export const useGameDataStore = defineStore(
       },
 
       removeCurrentGame(gameId) {
-        return axios.delete('https://localhost:7172/game/gameflow/', {
+        return axios.delete(`${process.env.VUE_APP_API_URL}/game/gameflow/`, {
           headers: {
             gameFlowId: gameId,
           },
@@ -72,7 +72,7 @@ export const useGameDataStore = defineStore(
       addUserStats(accessToken, gameId) {
         return axios({
           method: 'put',
-          url: 'https://localhost:7172/user/stats',
+          url: `${process.env.VUE_APP_API_URL}/user/stats`,
           headers: {
             Authorization: `Bearer ${accessToken}`,
             gameFlowId: gameId,
@@ -87,7 +87,7 @@ export const useGameDataStore = defineStore(
       getUserStats(accessToken) {
         return axios({
           method: 'get',
-          url: 'https://localhost:7172/user/stats',
+          url: `${process.env.VUE_APP_API_URL}/user/stats`,
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
