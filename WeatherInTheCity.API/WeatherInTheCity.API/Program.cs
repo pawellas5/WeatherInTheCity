@@ -35,6 +35,7 @@ Log.Logger = new LoggerConfiguration()
         rollingInterval: RollingInterval.Day)
     .CreateLogger();
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var ProdAllowSpecificOrigins = "_prodAllowSpecificOrigins";
 
 builder.Logging.AddSerilog(Log.Logger);
 builder.Services.AddControllers();
@@ -92,6 +93,16 @@ builder.Services.AddCors(options =>
                           policy.AllowAnyMethod()
                                  .AllowAnyHeader()
                                  .WithOrigins("http://localhost:8080");
+                      });
+});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: ProdAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.AllowAnyMethod()
+                                 .AllowAnyHeader()
+                                 .WithOrigins("https://blue-meadow-092e8ce03.5.azurestaticapps.net");
                       });
 });
 
@@ -200,6 +211,10 @@ app.UseRouting();
 
 if (app.Environment.IsDevelopment())
     app.UseCors(MyAllowSpecificOrigins);
+
+if(app.Environment.IsProduction())
+    app.UseCors(ProdAllowSpecificOrigins);
+
 
 app.UseRateLimiter();
 
