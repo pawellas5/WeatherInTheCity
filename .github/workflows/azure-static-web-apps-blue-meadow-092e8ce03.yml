@@ -2,6 +2,16 @@ name: Azure Static Web Apps CI/CD
 env:
   VUE_APP_API_URL:
     ${{secrets.VUE_APP_API_URL}}
+  VUE_APP_API_SERVER_URL:
+    ${{secrets.VUE_APP_API_SERVER_URL}}
+  VUE_APP_AUTH0_DOMAIN:
+    ${{secrets.VUE_APP_AUTH0_DOMAIN}}
+  VUE_APP_AUTH0_CLIENT_ID:
+    ${{secrets.VUE_APP_AUTH0_CLIENT_ID}}
+  VUE_APP_AUTH0_CALLBACK_URL:
+    ${{secrets.VUE_APP_AUTH0_CALLBACK_URL}}
+  VUE_APP_AUTH0_AUDIENCE:
+    ${{secrets.VUE_APP_AUTH0_AUDIENCE}}
 on:
   push:
     branches:
