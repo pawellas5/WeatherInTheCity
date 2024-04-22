@@ -22,3 +22,11 @@ jobs:
           push: true
           tags: ${{secrets.DOCKERHUB_USERNAME}}/weather_in_the_city_repo:${{ github.sha }}
           file: WeatherInTheCity.API/WeatherInTheCity.API/Dockerfile
+
+      - name: 'Run Azure webapp deploy action using publish profile credentials'
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{secrets.apiWebAppName}}
+          publish-profile: ${{ secrets.azureWebAppPublishProfile }}
+          images: ${{secrets.DOCKERHUB_USERNAME}}/weather_in_the_city_repo:${{ github.sha }}
+      
