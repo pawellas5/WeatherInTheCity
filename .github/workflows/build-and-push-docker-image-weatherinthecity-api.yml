@@ -20,5 +20,5 @@ jobs:
         with:
           context: WeatherInTheCity.API/
           push: true
-          tags: ${{secrets.DOCKERHUB_USERNAME}}/weather_in_the_city_repo:latest
+          tags: ${{secrets.DOCKERHUB_USERNAME}}/weather_in_the_city_repo:${{ github.sha }}
           file: WeatherInTheCity.API/WeatherInTheCity.API/Dockerfile
