@@ -34,7 +34,7 @@ jobs:
       - name: Build and push container image to registry
         uses: azure/container-apps-deploy-action@v2
         with:
-          appSourcePath: ${{ github.workspace }}/WeatherInTheCity.API/WeatherInTheCity.API 
+          appSourcePath: ${{ github.workspace }}/WeatherInTheCity.API/
           registryUrl: docker.io
           registryUsername: ${{ secrets.WEATHERINTHECITYAPI_REGISTRY_USERNAME }}
           registryPassword: ${{ secrets.WEATHERINTHECITYAPI_REGISTRY_PASSWORD }}
