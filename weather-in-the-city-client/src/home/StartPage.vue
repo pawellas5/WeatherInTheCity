@@ -79,8 +79,8 @@ export default {
 }
 .startGame button{
 
-    width:250px;
-    height:100px;
+    width:16rem;
+    height:6rem;
     border-radius: 2rem;
     border:0;
     background-color: #ff7900;

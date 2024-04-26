@@ -6,6 +6,7 @@ import GamePage from '../game/GamePage.vue';
 import ResultPage from '../result/ResultPage.vue';
 import CallbackPage from '../authentication/callback/CallbackPage.vue';
 import ProfilePage from '../profile/ProfilePage.vue';
+import AttributionPage from '../attribution/AttributionPage.vue';
 
 export default createRouter({
   routes: [
@@ -13,6 +14,15 @@ export default createRouter({
       name: 'Start',
       path: '/start',
       component: StartPage,
+    },
+    {
+      name: 'Attribution',
+      path: '/attribution',
+      component: AttributionPage,
+      beforeEnter: (to, from) => {
+        if (from.name === undefined) return { name: 'Home' };// on page refresh, go home
+        return true;
+      },
     },
 
     {

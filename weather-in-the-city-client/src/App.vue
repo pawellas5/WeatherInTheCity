@@ -28,9 +28,9 @@
     <div class="footerItems">
       <div class="footerItem">Copyright 2024 WeatherInTheCity PB</div>
       <div class="footerColSpace"></div>
-    <div class="footerItem"><a href="https://www.iconfinder.com/">
-      https://www.iconfinder.com/
-    </a></div>
+    <div class="footerItem"><router-link class="attrLink" to="/attribution">
+      Attribution
+    </router-link></div>
     </div>
     <div class="footerRowSpace"></div>
 
@@ -163,7 +163,7 @@ footer{
   height:5rem;
   background-color: rgb(53, 55, 59);
 }
-footer a{
+footer .attrLink{
 
   color:rgba(255, 255, 255,0.100);
   text-decoration:none;
@@ -239,7 +239,7 @@ footer a{
 }
 
 @media screen and (max-width: 1024px ) and (orientation:landscape){
-  footer a{
+  footer .attrLink{
     font-size: 1.2rem;
   }
   .navDiv{
@@ -262,7 +262,7 @@ footer a{
   .navDiv{
     height:85%;
   }
-  footer a{
+  footer .attrLink{
     font-size: 0.8rem;
     padding:1rem 0 1rem 0;
   }
@@ -313,7 +313,7 @@ footer a{
     width:50%;
   }
 
-  footer a{
+  footer .attrLink{
     font-size: 1rem;
   }
 
@@ -338,7 +338,7 @@ footer a{
     padding: 0rem 0rem 0rem 0rem;
   }
 
-  footer a{
+  footer .attrLink{
     font-size: 1.2rem;
   }
 
@@ -378,7 +378,7 @@ footer a{
 }
 
 @media screen and (max-width: 375px ){
-   footer a{
+   footer .attrLink{
     font-size: 1.1rem;
    }
 }

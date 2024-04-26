@@ -38,7 +38,7 @@ export default {
     useGameInfoStore().reset();
     const gameDataStore = useGameDataStore();
     onBeforeRouteLeave(async (to) => {
-      if (to.path === '/game' || to.path === '/profile' || to.path === '/start') {
+      if (to.path === '/game' || to.path === '/profile' || to.path === '/start' || to.path === '/attribution') {
         if (to.path !== '/game') await gameDataStore.removeCurrentGame(gameDataStore.gameFlowId);
         return true;
       }
@@ -89,8 +89,8 @@ export default {
 
   .homeBtn{
 
-      width:250px;
-      height:100px;
+      width:16rem;
+      height:6rem;
       border-radius: 2rem;
       border:0;
       background-color: #ff7900;
