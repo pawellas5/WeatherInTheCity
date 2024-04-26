@@ -85,6 +85,7 @@ export default {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    gap:1.5rem;
   }
 
   .homeBtn{

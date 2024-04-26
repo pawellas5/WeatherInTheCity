@@ -58,8 +58,9 @@ export default {
     border-radius: 2rem;
     width:70%;
     height:90%;
-    background-color:rgb(53, 55, 59);
-    border: 5px solid #1d1f20;
+    /* background-color:rgb(53, 55, 59); */
+    /* border: 5px solid #1d1f20; */
+    background-color:white;
 
   }
   .resultTitle{
@@ -69,10 +70,14 @@ export default {
     color:green;
   }
   .negativeResult{
-    color:red;
+    color:#ff7900;
+
   }
   .emoji{
     width: 40%;
+  }
+  .score{
+    color:#ff7900;
   }
 
   @media screen and (max-width: 1536px ) and (orientation: landscape){
@@ -149,6 +154,11 @@ export default {
 
   .emoji{
     width: 65%;
+  }
+
+  .result{
+    /* background-color:rgb(53, 55, 59); */
+    background-color: white;
   }
 
 }
